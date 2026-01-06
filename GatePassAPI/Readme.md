@@ -58,12 +58,12 @@ If already installed check if new version is available.
 
 Execute unit tests
 ```
-    cd "MotoPassAPI/test/MotoPassAPI.Tests"
+    cd "GatePassAPI/test/GatePassAPI.Tests"
     dotnet test
 ```
 
 Deploy application
 ```
-    cd "MotoPassAPI/src/MotoPassAPI"
+    cd "GatePassAPI/src/GatePassAPI"
     dotnet lambda deploy-serverless
 ```

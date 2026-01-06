@@ -8,7 +8,7 @@ import * as apigw from 'aws-cdk-lib/aws-apigatewayv2';
 import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import * as path from 'path';
 
-export class MotoPassInfrastructureStack extends cdk.Stack {
+export class GatePassInfrastructureStack extends cdk.Stack {
 	constructor (scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 		const vpc = new ec2.Vpc(this, 'ServerlessVpc', {
@@ -32,9 +32,9 @@ export class MotoPassInfrastructureStack extends cdk.Stack {
 		dbSecurityGroup.addIngressRule(lambdaSecurityGroup, ec2.Port.tcp(5432), 'Allow Lambda to reach Postgres');
 
 		const dbSecret = new secretsmanager.Secret(this, 'DbSecret', {
-			secretName: 'MotoPassAPI_Secret',
+			secretName: 'GatePassAPI_Secret',
 			generateSecretString: {
-				secretStringTemplate: JSON.stringify({ username: 'motopassapi' }),
+				secretStringTemplate: JSON.stringify({ username: 'gatepassapi' }),
 				generateStringKey: 'password',
 				excludeCharacters: `;/@": %$><'`,
 				passwordLength: 16,
@@ -58,9 +58,9 @@ export class MotoPassInfrastructureStack extends cdk.Stack {
 
 		const apiLambda = new lambda.Function(this, 'ApiLambda', {
 			runtime: lambda.Runtime.DOTNET_8,
-			handler: 'MotoPassAPI::MotoPassAPI.LambdaEntryPoint::FunctionHandlerAsync',
+			handler: 'GatePassAPI::GatePassAPI.LambdaEntryPoint::FunctionHandlerAsync',
 			code: lambda.Code.fromAsset(
-				path.join(__dirname, '../../MotoPassAPI/bin/Release/net8.0/publish')
+				path.join(__dirname, '../../GatePassAPI/bin/Release/net8.0/publish')
 			),
 			vpc,
 			timeout: cdk.Duration.seconds(30),
@@ -78,7 +78,7 @@ export class MotoPassInfrastructureStack extends cdk.Stack {
 		dbSecret.grantRead(apiLambda);
 
 		const httpApi = new apigw.HttpApi(this, 'ApiGateway', {
-			apiName: 'MotoPassAPI',
+			apiName: 'GatePassAPI',
 			description: 'HTTP API for ASP.NET Core on Lambda',
 		});
 

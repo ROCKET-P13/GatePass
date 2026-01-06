@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/moto_pass_infrastructure.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/gate_pass_infrastructure.ts",
   "watch": {
     "include": [
       "**"

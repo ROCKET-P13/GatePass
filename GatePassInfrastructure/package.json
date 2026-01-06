@@ -1,8 +1,8 @@
 {
-  "name": "moto_pass_infrastructure",
+  "name": "gate_pass_infrastructure",
   "version": "0.1.0",
   "bin": {
-    "moto_pass_infrastructure": "bin/moto_pass_infrastructure.js"
+    "gate_pass_infrastructure": "bin/gate_pass_infrastructure.js"
   },
   "scripts": {
     "build": "tsc",

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { MotoPassInfrastructureStack } from '../lib/moto_pass_infrastructure-stack';
+import { GatePassInfrastructureStack } from '../lib/gate_pass_infrastructure-stack';
 
 const app = new cdk.App();
-new MotoPassInfrastructureStack(app, 'MotoPassInfrastructureStack', {
+new GatePassInfrastructureStack(app, 'GatePassInfrastructureStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */

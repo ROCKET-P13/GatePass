@@ -1,4 +1,4 @@
-namespace MotoPassAPI.Entities;
+namespace GatePassAPI.Entities;
 
 public class Track {
 	public Guid Id { get; set; }

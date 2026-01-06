@@ -1,8 +1,8 @@
-using MotoPassAPI.Data;
-using MotoPassAPI.Entities;
-using MotoPassAPI.Repositories.Interfaces;
+using GatePassAPI.Data;
+using GatePassAPI.Entities;
+using GatePassAPI.Repositories.Interfaces;
 
-namespace MotoPassAPI.Repositories.TrackRepository;
+namespace GatePassAPI.Repositories.TrackRepository;
 
 public class TrackRepository(AppDatabaseContext databaseContext) : ITrackRepository
 {

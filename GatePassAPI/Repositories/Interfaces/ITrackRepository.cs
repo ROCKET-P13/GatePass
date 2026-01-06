@@ -1,6 +1,6 @@
-using MotoPassAPI.Entities;
+using GatePassAPI.Entities;
 
-namespace MotoPassAPI.Repositories.Interfaces;
+namespace GatePassAPI.Repositories.Interfaces;
 
 public interface ITrackRepository
 {

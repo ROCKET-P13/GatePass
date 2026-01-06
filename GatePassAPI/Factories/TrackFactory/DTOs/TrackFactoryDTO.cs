@@ -1,4 +1,4 @@
-namespace MotoPassAPI.Factories.TrackFactory.DTOs;
+namespace GatePassAPI.Factories.TrackFactory.DTOs;
 
 public class TrackFactoryDTO
 {

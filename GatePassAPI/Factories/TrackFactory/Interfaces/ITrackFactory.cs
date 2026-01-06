@@ -1,7 +1,7 @@
-using MotoPassAPI.Entities;
-using MotoPassAPI.Factories.TrackFactory.DTOs;
+using GatePassAPI.Entities;
+using GatePassAPI.Factories.TrackFactory.DTOs;
 
-namespace MotoPassAPI.Factories.TrackFactory.Interfaces;
+namespace GatePassAPI.Factories.TrackFactory.Interfaces;
 
 public interface ITrackFactory
 {

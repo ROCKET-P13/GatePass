@@ -1,6 +1,6 @@
-using MotoPassAPI.Entities;
+using GatePassAPI.Entities;
 
-namespace MotoPassAPI.Finders.TrackFinder.Interfaces;
+namespace GatePassAPI.Finders.TrackFinder.Interfaces;
 
 public interface ITrackFinder
 {

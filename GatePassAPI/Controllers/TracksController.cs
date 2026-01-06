@@ -1,12 +1,12 @@
 
 using Microsoft.AspNetCore.Mvc;
-using MotoPassAPI.DTOs.Requests;
-using MotoPassAPI.Factories.TrackFactory.DTOs;
-using MotoPassAPI.Factories.TrackFactory.Interfaces;
-using MotoPassAPI.Finders.TrackFinder.Interfaces;
-using MotoPassAPI.Repositories.Interfaces;
+using GatePassAPI.DTOs.Requests;
+using GatePassAPI.Factories.TrackFactory.DTOs;
+using GatePassAPI.Factories.TrackFactory.Interfaces;
+using GatePassAPI.Finders.TrackFinder.Interfaces;
+using GatePassAPI.Repositories.Interfaces;
 
-namespace MotoPassAPI.Controllers;
+namespace GatePassAPI.Controllers;
 
 [Route("api/[controller]")]
 public class TracksController

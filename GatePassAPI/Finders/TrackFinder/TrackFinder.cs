@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using MotoPassAPI.Data;
-using MotoPassAPI.Entities;
-using MotoPassAPI.Finders.TrackFinder.Interfaces;
+using GatePassAPI.Data;
+using GatePassAPI.Entities;
+using GatePassAPI.Finders.TrackFinder.Interfaces;
 
-namespace MotoPassAPI.Finders.TrackFinder;
+namespace GatePassAPI.Finders.TrackFinder;
 
 public class TrackFinder(AppDatabaseContext databaseContext) : ITrackFinder
 {

@@ -1,4 +1,4 @@
-namespace MotoPassAPI.DTOs.Requests;
+namespace GatePassAPI.DTOs.Requests;
 
 public class AddTrackRequest
 {

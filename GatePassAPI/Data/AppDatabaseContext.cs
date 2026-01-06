@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MotoPassAPI.Entities;
+using GatePassAPI.Entities;
 
-namespace MotoPassAPI.Data;
+namespace GatePassAPI.Data;
 
 public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : DbContext(options)
 {

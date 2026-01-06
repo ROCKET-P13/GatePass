@@ -1,11 +1,11 @@
 Build Steps:
 
-1. `cd` into the .NET project (MotoPassAPI) and run:
+1. `cd` into the .NET project (GatePassAPI) and run:
 ```
-dotnet lambda package --configuration Release --framework net8.0 --output-package bin/Release/net8.0/MotoPassAPI.zip
+dotnet lambda package --configuration Release --framework net8.0 --output-package bin/Release/net8.0/GatePassAPI.zip
 ```
 
-2. `cd` into the AWS CDK infrastrucutre (MotoPassInfrastructure) project and run:
+2. `cd` into the AWS CDK infrastrucutre (GatePassInfrastructure) project and run:
 ```
 cdk bootstrap
 ```
@@ -20,7 +20,7 @@ Deleting Stack:
 
 1. `cd` into the AWS CDK infrastructure project and run:
 ```
-cdk destroy MotoPassInfrastructureStack
+cdk destroy GatePassInfrastructureStack
 ```
 
 

@@ -3,12 +3,12 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MotoPassAPI.Data;
+using GatePassAPI.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MotoPassAPI.Migrations
+namespace GatePassAPI.Migrations
 {
     [DbContext(typeof(AppDatabaseContext))]
     partial class AppDatabaseContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace MotoPassAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("MotoPassAPI.Entities.Track", b =>
+            modelBuilder.Entity("GatePassAPI.Entities.Track", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

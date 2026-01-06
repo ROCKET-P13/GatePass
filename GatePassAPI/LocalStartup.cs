@@ -1,14 +1,14 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using MotoPassAPI.Data;
-using MotoPassAPI.Factories.TrackFactory;
-using MotoPassAPI.Factories.TrackFactory.Interfaces;
-using MotoPassAPI.Finders.TrackFinder;
-using MotoPassAPI.Finders.TrackFinder.Interfaces;
-using MotoPassAPI.Repositories.Interfaces;
-using MotoPassAPI.Repositories.TrackRepository;
+using GatePassAPI.Data;
+using GatePassAPI.Factories.TrackFactory;
+using GatePassAPI.Factories.TrackFactory.Interfaces;
+using GatePassAPI.Finders.TrackFinder;
+using GatePassAPI.Finders.TrackFinder.Interfaces;
+using GatePassAPI.Repositories.Interfaces;
+using GatePassAPI.Repositories.TrackRepository;
 
-namespace MotoPassAPI;
+namespace GatePassAPI;
 
 public class LocalStartup(IConfiguration configuration)
 {
@@ -54,7 +54,7 @@ public class LocalStartup(IConfiguration configuration)
             endpoints.MapControllers();
             endpoints.MapGet("/", async context =>
             {
-                await context.Response.WriteAsync("MotoPass API");
+                await context.Response.WriteAsync("GatePass API");
             });
         });
     }

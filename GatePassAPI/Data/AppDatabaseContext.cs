@@ -14,7 +14,14 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.ToTable("Venues");
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.Name).HasColumnName("name");
+			entity.Property(e => e.Sport).HasColumnName("sport");
 			entity.Property(e => e.LogoImageURL).HasColumnName("logo_image_url");
+			entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
+			entity.Property(e => e.AddressLine1).HasColumnName("address_line_1");
+			entity.Property(e => e.AddressLine2).HasColumnName("address_line_2");
+			entity.Property(e => e.City).HasColumnName("city");
+			entity.Property(e => e.State).HasColumnName("state");
+			entity.Property(e => e.Country).HasColumnName("country");
 		});
 	}
 }

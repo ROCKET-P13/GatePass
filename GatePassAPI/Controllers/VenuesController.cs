@@ -34,6 +34,7 @@ public class VenuesController
 			new VenueFactoryDTO
 			{
 				Name = request.Name,
+				Sport = request.Sport,
 				LogoImageURL = request.LogoImageURL,
 				PhoneNumber = request.PhoneNumber,
 				AddressLine1 = request.AddressLine1,

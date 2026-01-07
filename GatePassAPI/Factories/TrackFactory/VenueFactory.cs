@@ -11,6 +11,7 @@ public class VenueFactory : IVenueFactory
 		return new Venue
 		{
 			Id = Guid.NewGuid(),
+			Sport = dto.Sport,
 			Name = dto.Name,
 			LogoImageURL = dto.LogoImageURL,
 			PhoneNumber = dto.PhoneNumber,

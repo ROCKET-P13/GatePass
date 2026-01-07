@@ -3,6 +3,7 @@ namespace GatePassAPI.Entities;
 public class Venue {
 	public Guid Id { get; set; }
 	public required string Name { get; set; }
+	public required string Sport { get; set; }
 	public required string LogoImageURL { get; set; }
 	public required string PhoneNumber { get; set; }
 	public required string AddressLine1 { get; set; }

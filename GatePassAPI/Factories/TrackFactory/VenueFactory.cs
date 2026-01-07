@@ -1,14 +1,14 @@
 using GatePassAPI.Entities;
-using GatePassAPI.Factories.TrackFactory.DTOs;
-using GatePassAPI.Factories.TrackFactory.Interfaces;
+using GatePassAPI.Factories.VenueFactory.DTOs;
+using GatePassAPI.Factories.VenueFactory.Interfaces;
 
-namespace GatePassAPI.Factories.TrackFactory;
+namespace GatePassAPI.Factories.VenueFactory;
 
-public class TrackFactory : ITrackFactory
+public class VenueFactory : IVenueFactory
 {
-	public Track FromDto(TrackFactoryDTO dto)
+	public Venue FromDto(VenueFactoryDTO dto)
 	{
-		return new Track
+		return new Venue
 		{
 			Id = Guid.NewGuid(),
 			Name = dto.Name,

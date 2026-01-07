@@ -12,7 +12,7 @@ namespace GatePassAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tracks",
+                name: "Venues",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -27,7 +27,7 @@ namespace GatePassAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tracks", x => x.id);
+                    table.PrimaryKey("PK_Venues", x => x.id);
                 });
         }
 
@@ -35,7 +35,7 @@ namespace GatePassAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Tracks");
+                name: "Venues");
         }
     }
 }

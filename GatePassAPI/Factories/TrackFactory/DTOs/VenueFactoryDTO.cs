@@ -1,6 +1,6 @@
-namespace GatePassAPI.Factories.TrackFactory.DTOs;
+namespace GatePassAPI.Factories.VenueFactory.DTOs;
 
-public class TrackFactoryDTO
+public class VenueFactoryDTO
 {
 	public required string Name { get; set; }
 	public string LogoImageURL { get; set; } = string.Empty;

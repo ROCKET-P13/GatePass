@@ -22,7 +22,7 @@ namespace GatePassAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GatePassAPI.Entities.Track", b =>
+            modelBuilder.Entity("GatePassAPI.Entities.Venue", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace GatePassAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tracks", (string)null);
+                    b.ToTable("Venues", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -3,12 +3,12 @@ using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 using Microsoft.EntityFrameworkCore;
 using GatePassAPI.Data;
-using GatePassAPI.Factories.TrackFactory;
-using GatePassAPI.Factories.TrackFactory.Interfaces;
-using GatePassAPI.Finders.TrackFinder;
-using GatePassAPI.Finders.TrackFinder.Interfaces;
+using GatePassAPI.Factories.VenueFactory;
+using GatePassAPI.Factories.VenueFactory.Interfaces;
+using GatePassAPI.Finders.VenueFinder;
+using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.Interfaces;
-using GatePassAPI.Repositories.TrackRepository;
+using GatePassAPI.Repositories.VenueRepository;
 
 namespace GatePassAPI;
 
@@ -41,9 +41,9 @@ public class Startup(IConfiguration configuration)
 		services.AddDbContext<AppDatabaseContext>(options =>
 			options.UseNpgsql(connectionString));
 
-		services.AddScoped<ITrackRepository, TrackRepository>();
-		services.AddScoped<ITrackFinder, TrackFinder>();
-		services.AddScoped<ITrackFactory, TrackFactory>();
+		services.AddScoped<IVenueRepository, VenueRepository>();
+		services.AddScoped<IVenueFinder, VenueFinder>();
+		services.AddScoped<IVenueFactory, VenueFactory>();
 
 		services.AddControllers()
 		.AddJsonOptions(options =>

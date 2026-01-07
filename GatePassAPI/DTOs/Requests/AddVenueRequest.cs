@@ -1,6 +1,6 @@
 namespace GatePassAPI.DTOs.Requests;
 
-public class AddTrackRequest
+public class AddVenueRequest
 {
 	public required string Name { get; set; }
 	public string LogoImageURL { get; set; } = string.Empty;

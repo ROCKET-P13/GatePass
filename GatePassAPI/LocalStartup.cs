@@ -16,7 +16,7 @@ public class LocalStartup(IConfiguration configuration)
 
 	public void ConfigureServices(IServiceCollection services)
     {
-		string connectionString = Configuration.GetConnectionString("Postgres");
+		string connectionString = Configuration.GetConnectionString("Postgres") ?? throw new Exception("Connection String not found");
 		Console.WriteLine("Connection String: " + connectionString);
 
 		services.AddDbContext<AppDatabaseContext>(options =>

@@ -10,10 +10,19 @@ public class LocalEntryPoint
         CreateHostBuilder(args).Build().Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
+    public static IHostBuilder CreateHostBuilder(string[] args)
+	{
+		return Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<LocalStartup>();
+                webBuilder.ConfigureAppConfiguration((context, config) =>
+				{
+					config
+					.AddJsonFile(
+						$"appsettings.{context.HostingEnvironment.EnvironmentName}.json",
+						optional: true
+					);
+				}).UseStartup<LocalStartup>();
             });
+	}
 }

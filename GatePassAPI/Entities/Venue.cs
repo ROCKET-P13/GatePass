@@ -1,6 +1,7 @@
 namespace GatePassAPI.Entities;
 
-public class Venue {
+public class Venue
+{
 	public Guid Id { get; set; }
 	public required string Name { get; set; }
 	public required string Sport { get; set; }

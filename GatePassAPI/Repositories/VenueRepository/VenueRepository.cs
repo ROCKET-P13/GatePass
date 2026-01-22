@@ -1,6 +1,6 @@
 using GatePassAPI.Data;
 using GatePassAPI.Entities;
-using GatePassAPI.Repositories.Interfaces;
+using GatePassAPI.Repositories.VenueRepository.Interfaces;
 
 namespace GatePassAPI.Repositories.VenueRepository;
 

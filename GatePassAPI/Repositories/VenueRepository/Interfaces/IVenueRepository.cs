@@ -1,6 +1,6 @@
 using GatePassAPI.Entities;
 
-namespace GatePassAPI.Repositories.Interfaces;
+namespace GatePassAPI.Repositories.VenueRepository.Interfaces;
 
 public interface IVenueRepository
 {

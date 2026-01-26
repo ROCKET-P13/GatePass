@@ -5,8 +5,8 @@ using GatePassAPI.Factories.VenueFactory;
 using GatePassAPI.Factories.VenueFactory.Interfaces;
 using GatePassAPI.Finders.VenueFinder;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
-using GatePassAPI.Repositories.Interfaces;
 using GatePassAPI.Repositories.VenueRepository;
+using GatePassAPI.Repositories.VenueRepository.Interfaces;
 
 namespace GatePassAPI;
 

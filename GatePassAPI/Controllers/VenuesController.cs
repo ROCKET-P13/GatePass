@@ -4,7 +4,7 @@ using GatePassAPI.DTOs.Requests;
 using GatePassAPI.Factories.VenueFactory.DTOs;
 using GatePassAPI.Factories.VenueFactory.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
-using GatePassAPI.Repositories.Interfaces;
+using GatePassAPI.Repositories.VenueRepository.Interfaces;
 
 namespace GatePassAPI.Controllers;
 

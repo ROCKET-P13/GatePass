@@ -7,6 +7,8 @@ using GatePassAPI.Finders.VenueFinder;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.VenueRepository;
 using GatePassAPI.Repositories.VenueRepository.Interfaces;
+using GatePassAPI.Finders.EventFinder.Interfaces;
+using GatePassAPI.Finders.EventFinder;
 
 namespace GatePassAPI;
 
@@ -26,6 +28,8 @@ public class LocalStartup(IConfiguration configuration)
 		services.AddScoped<IVenueRepository, VenueRepository>();
 		services.AddScoped<IVenueFinder, VenueFinder>();
 		services.AddScoped<IVenueFactory, VenueFactory>();
+
+		services.AddScoped<IEventFinder, EventFinder>();
 
 		services.AddControllers()
 		.AddJsonOptions(options =>

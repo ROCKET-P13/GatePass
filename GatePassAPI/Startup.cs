@@ -36,8 +36,6 @@ public class Startup(IConfiguration configuration)
 	
 		var connectionString = $"Host={host};Port={port};Username={username};Password={password};Database={databaseName};Pooling=true";
 
-		Console.WriteLine("Connection String: " + connectionString);
-
 		services.AddDbContext<AppDatabaseContext>(options =>
 			options.UseNpgsql(connectionString));
 

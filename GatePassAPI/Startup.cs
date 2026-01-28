@@ -9,6 +9,9 @@ using GatePassAPI.Finders.VenueFinder;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.VenueRepository;
 using GatePassAPI.Repositories.VenueRepository.Interfaces;
+using GatePassAPI.Finders.EventFinder.Interfaces;
+using GatePassAPI.Finders.EventFinder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace GatePassAPI;
 
@@ -43,11 +46,20 @@ public class Startup(IConfiguration configuration)
 		services.AddScoped<IVenueFinder, VenueFinder>();
 		services.AddScoped<IVenueFactory, VenueFactory>();
 
+		services.AddScoped<IEventFinder, EventFinder>();
+
+		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+			.AddJwtBearer(options =>
+			{
+				options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
+				options.Audience = Configuration["Auth0:Audience"];
+			});
+
 		services.AddControllers()
-		.AddJsonOptions(options =>
-		{
-			options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-		});
+			.AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+			});
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -63,8 +75,8 @@ public class Startup(IConfiguration configuration)
 			db.Database.Migrate();
 		}
 
-        app.UseHttpsRedirection();
         app.UseRouting();
+		app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>

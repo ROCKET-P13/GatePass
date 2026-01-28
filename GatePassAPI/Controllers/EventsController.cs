@@ -1,4 +1,5 @@
 using GatePassAPI.Finders.EventFinder.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GatePassAPI.Controllers;
@@ -11,6 +12,7 @@ public class EventsController
 {
 	private readonly IEventFinder _eventFinder = eventFinder;
 
+	[Authorize]
 	[HttpGet]
 	public async Task<IActionResult> GetAll()
 	{

@@ -4,6 +4,7 @@ using GatePassAPI.Factories.VenueFactory.DTOs;
 using GatePassAPI.Factories.VenueFactory.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.VenueRepository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GatePassAPI.Controllers;
 
@@ -19,6 +20,7 @@ public class VenuesController
 	private readonly IVenueRepository _venueRepository = venueRepository;
 	private readonly IVenueFinder _venueFinder = venueFinder;
 
+	[Authorize]
 	[HttpGet]
 	public async Task<IActionResult> GetAll()
 	{
@@ -26,6 +28,7 @@ public class VenuesController
 		return Ok(venues);
 	}
 
+	[Authorize]
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] AddVenueRequest request)
 	{

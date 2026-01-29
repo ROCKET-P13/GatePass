@@ -18,8 +18,9 @@ namespace GatePassAPI.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     venue_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
-                    date = table.Column<string>(type: "text", nullable: false),
-                    participant_capacity = table.Column<string>(type: "text", nullable: true)
+                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    participant_capacity = table.Column<int>(type: "integer", nullable: true),
+                    status = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

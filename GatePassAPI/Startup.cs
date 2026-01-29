@@ -12,6 +12,10 @@ using GatePassAPI.Repositories.VenueRepository.Interfaces;
 using GatePassAPI.Finders.EventFinder.Interfaces;
 using GatePassAPI.Finders.EventFinder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using GatePassAPI.Factories.EventFactory.Interfaces;
+using GatePassAPI.Factories.EventFactory;
+using GatePassAPI.Repositories.EventRepository.Interfaces;
+using GatePassAPI.Repositories.EventRepository;
 
 namespace GatePassAPI;
 
@@ -47,6 +51,8 @@ public class Startup(IConfiguration configuration)
 		services.AddScoped<IVenueFactory, VenueFactory>();
 
 		services.AddScoped<IEventFinder, EventFinder>();
+		services.AddScoped<IEventFactory, EventFactory>();
+		services.AddScoped<IEventRepository, EventRepository>();
 
 		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			.AddJwtBearer(options =>

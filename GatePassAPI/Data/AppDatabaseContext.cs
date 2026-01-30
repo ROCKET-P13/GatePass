@@ -7,6 +7,7 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 {
 	public DbSet<Venue> Venues { get; set; }
 	public DbSet<Event> Events { get; set; }
+	public DbSet<User> Users { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -34,6 +35,18 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.Property(e => e.Date).HasColumnName("date");
 			entity.Property(e => e.ParticipantCapacity).HasColumnName("participant_capacity");
 			entity.Property(e => e.Status).HasColumnName("status");
+		});
+
+		modelBuilder.Entity<User>(entity =>
+		{
+			entity.ToTable("Users");
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.Auth0Id).HasColumnName("auth0_id");
+			entity.Property(e => e.VenueId).HasColumnName("venue_id");
+			entity.Property(e => e.Email).HasColumnName("email");
+			entity.Property(e => e.FirstName).HasColumnName("first_name");
+			entity.Property(e => e.LastName).HasColumnName("last_name");
+			entity.Property(e => e.CreatedAt).HasColumnName("created_at");
 		});
 	}
 }

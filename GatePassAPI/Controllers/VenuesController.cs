@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace GatePassAPI.Controllers;
 
 [Route("api/[controller]")]
+[Authorize]
 public class VenuesController
 (
 	IVenueFactory venueFactory,

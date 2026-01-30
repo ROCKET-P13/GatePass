@@ -14,6 +14,12 @@ using GatePassAPI.Factories.EventFactory.Interfaces;
 using GatePassAPI.Factories.EventFactory;
 using GatePassAPI.Repositories.EventRepository;
 using GatePassAPI.Repositories.EventRepository.Interfaces;
+using GatePassAPI.Finders.UserFinder.Interfaces;
+using GatePassAPI.Finders.UserFinder;
+using GatePassAPI.Factories.UserFactory.Interfaces;
+using GatePassAPI.Factories.UserFactory;
+using GatePassAPI.Repositories.UserRepository.Interfaces;
+using GatePassAPI.Repositories.UserRepository;
 
 namespace GatePassAPI;
 
@@ -35,6 +41,10 @@ public class LocalStartup(IConfiguration configuration)
 		services.AddScoped<IEventFinder, EventFinder>();
 		services.AddScoped<IEventFactory, EventFactory>();
 		services.AddScoped<IEventRepository, EventRepository>();
+
+		services.AddScoped<IUserFinder, UserFinder>();
+		services.AddScoped<IUserFactory, UserFactory>();
+		services.AddScoped<IUserRepository, UserRepository>();
 
 		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			.AddJwtBearer(options =>

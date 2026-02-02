@@ -25,33 +25,32 @@ public class UsersController
 	[HttpGet("me")]
 	public async Task<IActionResult> GetCurrentUser()
 	{
-		var auth0Id = User.FindFirstValue(ClaimTypes.NameIdentifier)
-			?? User.FindFirstValue("sub");
+		var auth0Id = User.FindFirstValue("sub");
 
-		if (auth0Id == null)
+		if (string.IsNullOrWhiteSpace(auth0Id))
 		{
 			return Unauthorized();
 		}
 
-		var user = await _userFinder.GetByAuth0Id(auth0Id);
-
-		var subClaim = User.FindFirstValue("sub");
-		var emailClaim = User.FindFirstValue("email");
-		var firstNameClaim = User.FindFirstValue("given_name");
-		var lastNameClaim = User.FindFirstValue("family_name");
-
-		if (subClaim == null || emailClaim == null || firstNameClaim == null || lastNameClaim == null)
+		var email = User.FindFirstValue("email");
+		if (email == null)
 		{
-			return BadRequest("Missing required user claims");
+			return BadRequest("Email claim missing");
 		}
+
+
+		var firstNameClaim = User.FindFirstValue("given_name") ?? "";
+		var lastNameClaim = User.FindFirstValue("family_name") ?? "";
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
 
 		if (user == null)
 		{
 			user = _userFactory.FromDto(new UserFactoryDTO
 				{
-					Auth0Id = subClaim,
+					Auth0Id = auth0Id,
 					VenueId = null,
-					Email = emailClaim,
+					Email = email,
 					FirstName = firstNameClaim,
 					LastName = lastNameClaim,
 				});

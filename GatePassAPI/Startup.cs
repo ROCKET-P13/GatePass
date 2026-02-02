@@ -64,12 +64,17 @@ public class Startup(IConfiguration configuration)
 		services.AddScoped<IUserFactory, UserFactory>();
 		services.AddScoped<IUserRepository, UserRepository>();
 
-		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-			.AddJwtBearer(options =>
-			{
-				options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
-				options.Audience = Configuration["Auth0:Audience"];
-			});
+		services.AddAuthentication(options =>
+		{
+			options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+		})
+		.AddJwtBearer(options =>
+		{
+			options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
+			options.Audience = Configuration["Auth0:Audience"];
+			options.MapInboundClaims = false;
+		});
 
 		services.AddControllers()
 			.AddJsonOptions(options =>

@@ -49,7 +49,6 @@ public class UsersController
 			user = _userFactory.FromDto(new UserFactoryDTO
 				{
 					Auth0Id = auth0Id,
-					VenueId = null,
 					Email = email,
 					FirstName = firstNameClaim,
 					LastName = lastNameClaim,

@@ -12,7 +12,6 @@ public class UserFactory : IUserFactory
 		{
 			Id = Guid.NewGuid(),
 			Auth0Id = dto.Auth0Id,
-			VenueId = dto.VenueId,
 			Email = dto.Email,
 			FirstName = dto.FirstName,
 			LastName = dto.LastName,

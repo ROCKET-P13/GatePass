@@ -5,6 +5,9 @@ using GatePassAPI.Factories.VenueFactory.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.VenueRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using GatePassAPI.Finders.UserFinder.Interfaces;
+using GatePassAPI.Repositories.UserRepository.Interfaces;
 
 namespace GatePassAPI.Controllers;
 
@@ -14,13 +17,15 @@ public class VenuesController
 (
 	IVenueFactory venueFactory,
 	IVenueRepository venueRepository,
-	IVenueFinder venueFinder
+	IVenueFinder venueFinder,
+	IUserRepository userRepository
 ) : ControllerBase
 {
 	private readonly IVenueFactory _venueFactory = venueFactory;
 	private readonly IVenueRepository _venueRepository = venueRepository;
 	private readonly IVenueFinder _venueFinder = venueFinder;
-
+	private readonly IUserRepository _userRepository = userRepository;
+	
 	[Authorize]
 	[HttpGet]
 	public async Task<IActionResult> GetAll()
@@ -33,6 +38,26 @@ public class VenuesController
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] AddVenueRequest request)
 	{
+
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userRepository.FindByAuth0Id(auth0Id);
+
+		if (user == null)
+		{
+			return Unauthorized();
+		}
+
+		if (user.VenueId != null)
+		{
+			return BadRequest("User already belongs to a venue");
+		}
+
 		var venueEntity = _venueFactory.FromDto(
 			new VenueFactoryDTO
 			{
@@ -49,6 +74,9 @@ public class VenuesController
 		);
 
 		var venue = await _venueRepository.Upsert(venueEntity);
+
+		user.AssignToVenue(venue.Id);
+		await _userRepository.Upsert(user);
 
 		return Ok(venue);
 	}

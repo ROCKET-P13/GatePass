@@ -6,7 +6,6 @@ using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.VenueRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using GatePassAPI.Finders.UserFinder.Interfaces;
 using GatePassAPI.Repositories.UserRepository.Interfaces;
 
 namespace GatePassAPI.Controllers;
@@ -38,6 +37,10 @@ public class VenuesController
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] AddVenueRequest request)
 	{
+		if (request == null)
+		{
+			return BadRequest("Request body missing");
+		}
 
 		var auth0Id = User.FindFirstValue("sub");
 
@@ -50,7 +53,7 @@ public class VenuesController
 
 		if (user == null)
 		{
-			return Unauthorized();
+			return Unauthorized("User not found.");
 		}
 
 		if (user.VenueId != null)
@@ -62,7 +65,6 @@ public class VenuesController
 			new VenueFactoryDTO
 			{
 				Name = request.Name,
-				Sport = request.Sport,
 				LogoImageURL = request.LogoImageURL,
 				PhoneNumber = request.PhoneNumber,
 				AddressLine1 = request.AddressLine1,

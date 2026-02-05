@@ -3,7 +3,6 @@ namespace GatePassAPI.DTOs.Requests;
 public class AddVenueRequest
 {
 	public required string Name { get; set; }
-	public required string Sport { get; set; }
 	public string LogoImageURL { get; set; } = string.Empty;
 	public string PhoneNumber { get; set; } = string.Empty;
 	public required string AddressLine1 { get; set; }

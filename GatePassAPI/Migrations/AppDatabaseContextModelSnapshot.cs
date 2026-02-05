@@ -138,11 +138,6 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("text")
                         .HasColumnName("phone_number");
 
-                    b.Property<string>("Sport")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("sport");
-
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("text")

@@ -8,10 +8,10 @@ public class VenueFactory : IVenueFactory
 {
 	public Venue FromDto(VenueFactoryDTO dto)
 	{
+		Console.WriteLine(dto);
 		return new Venue
 		{
 			Id = Guid.NewGuid(),
-			Sport = dto.Sport,
 			Name = dto.Name,
 			LogoImageURL = dto.LogoImageURL,
 			PhoneNumber = dto.PhoneNumber,

@@ -2,7 +2,6 @@ namespace GatePassAPI.DTOs.Requests;
 
 public class AddEventRequest
 {
-	public required Guid VenueId { get; set; }
 	public required string Name { get; set; }
 	public required DateTime Date { get; set; }
 	public required string Status { get; set; }

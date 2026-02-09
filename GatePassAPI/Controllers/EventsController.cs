@@ -81,10 +81,37 @@ public class EventsController
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] AddEventRequest request)
 	{
+
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return NotFound("User is not assigned to a venue");
+		}
+
+		var venue = await _venueFinder.GetById(user.VenueId);
+
+		if (venue == null)
+		{
+			return NotFound("Venue not found");
+		}
+		
 		var eventEntity = _eventFactory.FromDto(
 			new EventFactoryDTO
 			{
-				VenueId = request.VenueId,
+				VenueId = venue.Id,
 				Name = request.Name,
 				Date = request.Date,
 				Status = request.Status,

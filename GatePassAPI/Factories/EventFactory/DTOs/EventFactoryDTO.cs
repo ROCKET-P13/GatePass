@@ -6,5 +6,5 @@ public class EventFactoryDTO
 	public required string Name { get; set; }
 	public required DateTime Date { get; set; }
 	public required string Status { get; set; }
-	public int ParticipantCapacity { get; set; } = 0;
+	public int ParticipantCapacity { get; set; }
 }

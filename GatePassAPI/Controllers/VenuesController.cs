@@ -26,14 +26,6 @@ public class VenuesController
 	private readonly IUserRepository _userRepository = userRepository;
 	
 	[Authorize]
-	[HttpGet]
-	public async Task<IActionResult> GetAll()
-	{
-		var venues = await _venueFinder.GetAll();
-		return Ok(venues);
-	}
-
-	[Authorize]
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] AddVenueRequest request)
 	{

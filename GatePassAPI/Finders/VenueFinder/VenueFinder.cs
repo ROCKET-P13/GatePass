@@ -9,8 +9,9 @@ public class VenueFinder(AppDatabaseContext databaseContext) : IVenueFinder
 {
 	private readonly AppDatabaseContext _databaseContext = databaseContext;
 
-	public async Task<List<Venue>> GetAll()
+	public async Task<Venue?> GetById(Guid? venueId)
 	{
-		return await _databaseContext.Venues.ToListAsync();
+		return await _databaseContext.Venues
+		.FirstOrDefaultAsync(venue => venue.Id == venueId);
 	}
 }

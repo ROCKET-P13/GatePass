@@ -7,6 +7,8 @@ using GatePassAPI.Repositories.VenueRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using GatePassAPI.Repositories.UserRepository.Interfaces;
+using Microsoft.VisualBasic;
+using GatePassAPI.Finders.UserFinder.Interfaces;
 
 namespace GatePassAPI.Controllers;
 
@@ -25,7 +27,7 @@ public class VenuesController
 	private readonly IVenueRepository _venueRepository = venueRepository;
 	private readonly IVenueFinder _venueFinder = venueFinder;
 	private readonly IUserRepository _userRepository = userRepository;
-	
+
 	[Authorize]
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] AddVenueRequest request)

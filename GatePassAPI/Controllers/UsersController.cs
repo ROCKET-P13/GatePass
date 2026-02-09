@@ -2,6 +2,7 @@ using System.Security.Claims;
 using GatePassAPI.Factories.UserFactory.DTOs;
 using GatePassAPI.Factories.UserFactory.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
+using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.UserRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,14 @@ public class UsersController
 (
 	IUserFinder userFinder,
 	IUserFactory userFactory,
-	IUserRepository userRepository
+	IUserRepository userRepository,
+	IVenueFinder venueFinder
 ) : ControllerBase
 {
 	private readonly IUserFinder _userFinder = userFinder;
 	private readonly IUserFactory _userFactory = userFactory;
 	private readonly IUserRepository _userRepository = userRepository;
+	private readonly IVenueFinder _venueFinder = venueFinder;
 
 	[Authorize]
 	[HttpGet("me")]
@@ -68,5 +71,38 @@ public class UsersController
 			user.LastName,
 			user.VenueId
 		});
+	}
+
+	[Authorize]
+	[HttpGet("venue")]
+	public async Task<IActionResult> GetVenue()
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+		
+		if (user.VenueId == null)
+		{
+			return NotFound("User is not assigned to a venue");
+		}
+
+		var venue = await _venueFinder.GetById(user.VenueId);
+
+		if (venue == null)
+		{
+			return NotFound("Venue not found");
+		}
+
+		return Ok(venue);
 	}
 }

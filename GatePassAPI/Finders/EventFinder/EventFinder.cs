@@ -13,4 +13,16 @@ public class EventFinder(AppDatabaseContext databaseContext) : IEventFinder
 	{
 		return await _databaseContext.Events.ToListAsync();
 	}
+
+	public async Task<List<Event>> GetByDateRange(Guid venueId, DateTime start, DateTime end)
+	{
+		return await _databaseContext.Events
+		.Where(e => 
+			e.VenueId == venueId &&
+			e.Date >= start &&
+			e.Date < end
+		)
+		.OrderBy(e => e.Date)
+		.ToListAsync();
+	}
 }

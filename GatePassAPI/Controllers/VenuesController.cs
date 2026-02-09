@@ -9,6 +9,7 @@ using System.Security.Claims;
 using GatePassAPI.Repositories.UserRepository.Interfaces;
 
 namespace GatePassAPI.Controllers;
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]

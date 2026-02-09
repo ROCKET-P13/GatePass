@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GatePassAPI.Controllers;
 
+[ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class EventsController

@@ -19,10 +19,10 @@ public class EventFinder(AppDatabaseContext databaseContext) : IEventFinder
 		return await _databaseContext.Events
 		.Where(e => 
 			e.VenueId == venueId &&
-			e.Date >= start &&
-			e.Date < end
+			e.StartDateTime >= start &&
+			e.StartDateTime < end
 		)
-		.OrderBy(e => e.Date)
+		.OrderBy(e => e.StartDateTime)
 		.ToListAsync();
 	}
 }

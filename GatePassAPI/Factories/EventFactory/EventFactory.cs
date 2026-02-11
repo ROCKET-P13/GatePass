@@ -13,9 +13,9 @@ public class EventFactory : IEventFactory
 			Id = Guid.NewGuid(),
 			VenueId = dto.VenueId,
 			Name = dto.Name,
-			Date = dto.Date,
+			StartDateTime = dto.StartDateTime,
+			Status = dto.Status,
 			ParticipantCapacity = dto.ParticipantCapacity,
-			Status = dto.Status
 		};
 	}
 }

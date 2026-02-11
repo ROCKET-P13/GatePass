@@ -31,7 +31,7 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.VenueId).HasColumnName("venue_id");
 			entity.Property(e => e.Name).HasColumnName("name");
-			entity.Property(e => e.Date).HasColumnName("date");
+			entity.Property(e => e.StartDateTime).HasColumnName("start_date_time");
 			entity.Property(e => e.ParticipantCapacity).HasColumnName("participant_capacity");
 			entity.Property(e => e.Status).HasColumnName("status");
 		});

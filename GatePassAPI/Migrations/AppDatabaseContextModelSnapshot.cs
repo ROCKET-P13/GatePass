@@ -29,10 +29,6 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -41,6 +37,10 @@ namespace GatePassAPI.Migrations
                     b.Property<int?>("ParticipantCapacity")
                         .HasColumnType("integer")
                         .HasColumnName("participant_capacity");
+
+                    b.Property<DateTimeOffset>("StartDateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date_time");
 
                     b.Property<string>("Status")
                         .IsRequired()

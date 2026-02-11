@@ -107,13 +107,13 @@ public class EventsController
 		{
 			return NotFound("Venue not found");
 		}
-		
+
 		var eventEntity = _eventFactory.FromDto(
 			new EventFactoryDTO
 			{
 				VenueId = venue.Id,
 				Name = request.Name,
-				Date = request.Date,
+				StartDateTime = request.StartDateTime,
 				Status = request.Status,
 				ParticipantCapacity = request.ParticipantCapacity
 			}

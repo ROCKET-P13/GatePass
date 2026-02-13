@@ -17,12 +17,21 @@ public class EventFinder(AppDatabaseContext databaseContext) : IEventFinder
 	public async Task<List<Event>> GetByDateRange(Guid venueId, DateTime start, DateTime end)
 	{
 		return await _databaseContext.Events
-		.Where(e => 
-			e.VenueId == venueId &&
-			e.StartDateTime >= start &&
-			e.StartDateTime < end
-		)
-		.OrderBy(e => e.StartDateTime)
-		.ToListAsync();
+			.Where(e => 
+				e.VenueId == venueId &&
+				e.StartDateTime >= start &&
+				e.StartDateTime < end
+			)
+			.OrderBy(e => e.StartDateTime)
+			.ToListAsync();
+	}
+
+	public async Task<Event?> GetById(Guid venueId, Guid eventId)
+	{
+		return await _databaseContext.Events
+			.FirstOrDefaultAsync(e =>
+				e.VenueId == venueId &&
+				e.Id == eventId
+			);
 	}
 }

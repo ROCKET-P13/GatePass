@@ -22,6 +22,7 @@ using GatePassAPI.Factories.UserFactory.Interfaces;
 using GatePassAPI.Factories.UserFactory;
 using GatePassAPI.Repositories.UserRepository.Interfaces;
 using GatePassAPI.Repositories.UserRepository;
+using System.Text.Json.Serialization;
 
 namespace GatePassAPI;
 
@@ -79,6 +80,7 @@ public class Startup(IConfiguration configuration)
 		services.AddControllers()
 			.AddJsonOptions(options =>
 			{
+				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 			});
     }

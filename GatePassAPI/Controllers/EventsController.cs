@@ -139,7 +139,7 @@ public class EventsController
 
 	[Authorize]
 	[HttpPatch("{eventId}/status")]
-	public async Task<IActionResult> UpdateStatus([FromRoute]Guid eventId, [FromBody] UpdateEventRequest request)
+	public async Task<IActionResult> UpdateStatus(Guid eventId, [FromBody] UpdateEventRequest request)
 	{
 		if (!Enum.IsDefined(typeof(EventStatus), request.Status))
 		{

@@ -165,8 +165,58 @@ public class EventsController
 			return BadRequest("User is not assigned to a venue");
 		}
 
-		var eventEntity = await _eventFinder.GetById(user.VenueId.Value, eventId);
-		return Ok(eventEntity);
+		var eventEntity = await _eventFinder.GetById(eventId);
 
+		if (eventEntity == null)
+		{
+			return NotFound();
+		}
+
+		if (user.VenueId != eventEntity.VenueId)
+		{
+			return Forbid();
+		}
+
+		return Ok(eventEntity);
+	}
+
+	[Authorize]
+	[HttpDelete("{eventId:guid}")]
+	public async Task<IActionResult> DeleteEvent(Guid eventId)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+		
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return BadRequest("User is not assigned to a venue");
+		}
+
+		var eventEntity = await _eventFinder.GetById(eventId);
+
+		if (eventEntity == null)
+		{
+			return NotFound();
+		}
+
+		if (eventEntity.VenueId != user.VenueId)
+		{
+			return Forbid();
+		}
+
+		await _eventRepository.Delete(eventEntity.Id);
+
+		return NoContent();
 	}
 }

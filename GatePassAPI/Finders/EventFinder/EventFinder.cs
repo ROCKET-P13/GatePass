@@ -26,11 +26,10 @@ public class EventFinder(AppDatabaseContext databaseContext) : IEventFinder
 			.ToListAsync();
 	}
 
-	public async Task<Event?> GetById(Guid venueId, Guid eventId)
+	public async Task<Event?> GetById(Guid eventId)
 	{
 		return await _databaseContext.Events
 			.FirstOrDefaultAsync(e =>
-				e.VenueId == venueId &&
 				e.Id == eventId
 			);
 	}

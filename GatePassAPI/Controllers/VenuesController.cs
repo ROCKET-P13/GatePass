@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using GatePassAPI.DTOs.Requests;
 using GatePassAPI.Factories.VenueFactory.DTOs;
 using GatePassAPI.Factories.VenueFactory.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
@@ -7,8 +6,7 @@ using GatePassAPI.Repositories.VenueRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using GatePassAPI.Repositories.UserRepository.Interfaces;
-using Microsoft.VisualBasic;
-using GatePassAPI.Finders.UserFinder.Interfaces;
+using GatePassAPI.Controllers.DTOs;
 
 namespace GatePassAPI.Controllers;
 

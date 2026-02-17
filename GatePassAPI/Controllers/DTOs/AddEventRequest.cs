@@ -1,6 +1,6 @@
 using GatePassAPI.Enums;
 
-namespace GatePassAPI.DTOs.Requests;
+namespace GatePassAPI.Controllers.DTOs;
 
 public class AddEventRequest
 {

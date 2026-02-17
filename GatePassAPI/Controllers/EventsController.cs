@@ -1,6 +1,5 @@
 using System.Security.Claims;
-using GatePassAPI.DTOs.Requests;
-using GatePassAPI.Entities;
+using GatePassAPI.Controllers.DTOs;
 using GatePassAPI.Enums;
 using GatePassAPI.Factories.EventFactory.DTOs;
 using GatePassAPI.Factories.EventFactory.Interfaces;
@@ -138,10 +137,11 @@ public class EventsController
 	}
 
 	[Authorize]
-	[HttpPatch("{eventId}/status")]
-	public async Task<IActionResult> UpdateStatus(Guid eventId, [FromBody] UpdateEventRequest request)
+	[HttpPatch("{eventId:guid}")]
+	public async Task<IActionResult> Update(Guid eventId, [FromBody] UpdateEventRequest request)
 	{
-		if (!Enum.IsDefined(typeof(EventStatus), request.Status))
+
+		if (request.Status != null && !Enum.IsDefined(typeof(EventStatus), request.Status))
 		{
 			return BadRequest("Invalid Status");
 		}
@@ -165,17 +165,25 @@ public class EventsController
 			return BadRequest("User is not assigned to a venue");
 		}
 
-		var eventEntity = await _eventFinder.GetById(eventId);
+		var eventEntity = await _eventRepository.FindById(eventId, user.VenueId);
 
 		if (eventEntity == null)
 		{
 			return NotFound();
 		}
 
-		if (user.VenueId != eventEntity.VenueId)
+		if (eventEntity.Status == EventStatus.Completed && request.Status != EventStatus.Completed)
 		{
-			return Forbid();
+			return BadRequest("Completed events cannot change status");
 		}
+
+		eventEntity.Update(
+			request.Name,
+			request.StartDateTime,
+			request.Status,
+			request.ParticipantCapacity
+		);
+
 
 		return Ok(eventEntity);
 	}

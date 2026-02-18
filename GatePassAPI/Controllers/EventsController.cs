@@ -184,8 +184,8 @@ public class EventsController
 			request.ParticipantCapacity
 		);
 
-
-		return Ok(eventEntity);
+		var updatedEvent = await _eventRepository.Update(eventEntity);
+		return Ok(updatedEvent);
 	}
 
 	[Authorize]

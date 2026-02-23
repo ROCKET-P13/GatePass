@@ -34,8 +34,49 @@ public class EventsController
 	[HttpGet]
 	public async Task<IActionResult> GetAll()
 	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
 		var events = await _eventFinder.GetAll();
 		return Ok(events);
+	}
+
+	[Authorize]
+	[HttpGet("{eventId:guid}")]
+	public async Task<IActionResult> GetById(Guid eventId)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return NotFound("User is not assigned to a venue");
+		}
+
+		var venue = await _venueFinder.GetById(user.VenueId);
+
+		if (venue == null)
+		{
+			return NotFound("Venue not found");
+		}
+
+		var requestedEvent = await _eventFinder.GetById(eventId);
+		return Ok(requestedEvent);
 	}
 
 	[Authorize]

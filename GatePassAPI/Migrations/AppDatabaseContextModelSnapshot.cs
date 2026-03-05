@@ -95,16 +95,11 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("participant_id");
 
-                    b.Property<Guid?>("ParticipantId1")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
                     b.HasIndex("ParticipantId");
-
-                    b.HasIndex("ParticipantId1");
 
                     b.HasIndex("EventId", "CheckedIn");
 
@@ -246,14 +241,10 @@ namespace GatePassAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("GatePassAPI.Entities.Participant", "Participant")
-                        .WithMany()
+                        .WithMany("Registrations")
                         .HasForeignKey("ParticipantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("GatePassAPI.Entities.Participant", null)
-                        .WithMany("Registrations")
-                        .HasForeignKey("ParticipantId1");
 
                     b.Navigation("Event");
 

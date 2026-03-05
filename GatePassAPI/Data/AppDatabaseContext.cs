@@ -84,7 +84,7 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 				.OnDelete(DeleteBehavior.Cascade);
 
 			entity.HasOne(e => e.Participant)
-				.WithMany()
+				.WithMany(e => e.Registrations)
 				.HasForeignKey(e => e.ParticipantId)
 				.OnDelete(DeleteBehavior.Cascade);
 

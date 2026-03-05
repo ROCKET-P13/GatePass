@@ -4,6 +4,7 @@ using GatePassAPI.Enums;
 using GatePassAPI.Factories.EventFactory.DTOs;
 using GatePassAPI.Factories.EventFactory.Interfaces;
 using GatePassAPI.Finders.EventFinder.Interfaces;
+using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.EventRepository.Interfaces;
@@ -21,7 +22,8 @@ public class EventsController
 	IEventFactory eventFactory,
 	IEventRepository eventRepository,
 	IUserFinder userFinder,
-	IVenueFinder venueFinder
+	IVenueFinder venueFinder,
+	IEventRegistrationFinder eventRegistrationFinder
 ) : ControllerBase
 {
 	private readonly IEventFinder _eventFinder = eventFinder;
@@ -29,6 +31,7 @@ public class EventsController
 	private readonly IEventRepository _eventRepository = eventRepository;
 	private readonly IUserFinder _userFinder = userFinder;
 	private readonly IVenueFinder _venueFinder = venueFinder;
+	private readonly IEventRegistrationFinder _eventRegistrationFinder = eventRegistrationFinder;
 
 	[Authorize]
 	[HttpGet]
@@ -267,5 +270,44 @@ public class EventsController
 		await _eventRepository.Delete(eventEntity.Id);
 
 		return NoContent();
+	}
+
+	[Authorize]
+	[HttpGet("{eventId:guid}/registrations")]
+	public async Task<IActionResult> GetRegistrations(Guid eventId)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+		
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return BadRequest("User is not assigned to a venue");
+		}
+
+		var eventEntity = await _eventFinder.GetById(eventId);
+
+		if (eventEntity == null)
+		{
+			return NotFound();
+		}
+
+		if (eventEntity.VenueId != user.VenueId)
+		{
+			return Forbid();
+		}
+
+		var registrations = await _eventRegistrationFinder.GetByEventId(eventId);
+		return Ok(registrations);
 	}
 }

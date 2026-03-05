@@ -10,6 +10,7 @@ public class Event
 	public DateTimeOffset StartDateTime { get; set; }
 	public required EventStatus Status { get; set; }
 	public int? ParticipantCapacity { get; set; }
+	public ICollection<EventRegistration> Registrations { get; set; } = [];
 
 	public void Update(
 		string? name,

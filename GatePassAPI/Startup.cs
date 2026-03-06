@@ -30,6 +30,8 @@ using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using GatePassAPI.Finders.ParticipantFinder;
 using GatePassAPI.Factories.ParticipantFactory.Interfaces;
 using GatePassAPI.Factories.ParticipantFactory;
+using GatePassAPI.Repositories.ParticipantRepository.Interfaces;
+using GatePassAPI.Repositories.ParticipantRepository;
 
 namespace GatePassAPI;
 
@@ -76,6 +78,7 @@ public class Startup(IConfiguration configuration)
 
 		services.AddScoped<IParticipantFinder, ParticipantFinder>();
 		services.AddScoped<IParticipantFactory, ParticipantFactory>();
+		services.AddScoped<IParticipantRepository, ParticipantRepository>();
 		
 		services.AddAuthentication(options =>
 		{

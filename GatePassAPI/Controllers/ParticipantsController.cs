@@ -5,6 +5,7 @@ using GatePassAPI.Factories.ParticipantFactory.Interfaces;
 using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
+using GatePassAPI.Repositories.ParticipantRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,13 +20,15 @@ public class ParticipantsController
 	IUserFinder userFinder,
 	IVenueFinder venueFinder,
 	IParticipantFinder participantFinder,
-	IParticipantFactory participantFactory
+	IParticipantFactory participantFactory,
+	IParticipantRepository participantRepository
 ) : ControllerBase
 {
 	private readonly IUserFinder _userFinder = userFinder;
 	private readonly IVenueFinder _venueFinder = venueFinder;
 	private readonly IParticipantFinder _participantFinder = participantFinder;
 	private readonly IParticipantFactory _participantFactory = participantFactory;
+	private readonly IParticipantRepository _participantRepository = participantRepository;
 
 
 	[Authorize]
@@ -97,7 +100,7 @@ public class ParticipantsController
 			return NotFound("Venue not found");
 		}
 
-		var participant = _participantFactory.FromDto(
+		var participantEntity = _participantFactory.FromDto(
 			new ParticipantFactoryDTO
 			{
 				VenueId = venue.Id,
@@ -105,6 +108,8 @@ public class ParticipantsController
 				LastName = request.LastName
 			}
 		);
+
+		var participant = await _participantRepository.Upsert(participantEntity);
 
 		return Ok(participant);
 	}

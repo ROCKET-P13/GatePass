@@ -60,10 +60,11 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 		{
 			entity.ToTable("Participants");
 			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.VenueId).HasColumnName("venue_id");
 			entity.Property(e => e.FirstName).HasColumnName("first_name");
 			entity.Property(e => e.LastName).HasColumnName("last_name");
 
-			entity.HasIndex(e => new { e.LastName, e.FirstName });
+			entity.HasIndex(e => e.VenueId);
 		});
 
 		modelBuilder.Entity<EventRegistration>(entity =>

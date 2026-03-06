@@ -128,9 +128,13 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
+                    b.Property<Guid>("VenueId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("venue_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("LastName", "FirstName");
+                    b.HasIndex("VenueId");
 
                     b.ToTable("Participants", (string)null);
                 });
@@ -249,6 +253,17 @@ namespace GatePassAPI.Migrations
                     b.Navigation("Event");
 
                     b.Navigation("Participant");
+                });
+
+            modelBuilder.Entity("GatePassAPI.Entities.Participant", b =>
+                {
+                    b.HasOne("GatePassAPI.Entities.Venue", "Venue")
+                        .WithMany()
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("GatePassAPI.Entities.Event", b =>

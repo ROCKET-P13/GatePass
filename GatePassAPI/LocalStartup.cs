@@ -23,6 +23,8 @@ using GatePassAPI.Repositories.UserRepository;
 using System.Text.Json.Serialization;
 using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.EventRegistrationFinder;
+using GatePassAPI.Finders.ParticipantFinder.Interfaces;
+using GatePassAPI.Finders.ParticipantFinder;
 
 namespace GatePassAPI;
 
@@ -50,6 +52,7 @@ public class LocalStartup(IConfiguration configuration)
 		services.AddScoped<IUserRepository, UserRepository>();
 
 		services.AddScoped<IEventRegistrationFinder, EventRegistrationFinder>();
+		services.AddScoped<IParticipantFinder, ParticipantFinder>();
 
 
 		services.AddAuthentication(options =>

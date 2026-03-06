@@ -111,6 +111,12 @@ public class ParticipantsController
 
 		var participant = await _participantRepository.Upsert(participantEntity);
 
-		return Ok(participant);
+		return Ok(new
+		{
+			participant.Id,
+			participant.FirstName,
+			participant.LastName,
+			participant.CreatedAt
+		});
 	}
 } 

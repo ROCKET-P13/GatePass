@@ -1,5 +1,5 @@
 using GatePassAPI.Data;
-using GatePassAPI.Entities;
+using GatePassAPI.Finders.ParticipantFinder.DTOs;
 using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +9,17 @@ public class ParticipantFinder(AppDatabaseContext databaseContext) : IParticipan
 {
 	private readonly AppDatabaseContext _databaseContext = databaseContext;
 
-	public async Task<List<Participant>> GetAll(Guid venueId)
+	public async Task<List<ParticipantViewModel>> GetAll(Guid venueId)
 	{
 		var participants = await _databaseContext.Participants
-			.Where(p =>
-			p.VenueId == venueId)
+			.Where(p => p.VenueId == venueId)
+			.Select(p => new ParticipantViewModel
+			{
+				Id = p.Id,
+				FirstName = p.FirstName,
+				LastName = p.LastName,
+				CreatedAt = p.CreatedAt
+			})
 			.ToListAsync();
 
 		return participants; 

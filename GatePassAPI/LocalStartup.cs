@@ -25,6 +25,8 @@ using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.EventRegistrationFinder;
 using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using GatePassAPI.Finders.ParticipantFinder;
+using GatePassAPI.Factories.ParticipantFactory;
+using GatePassAPI.Factories.ParticipantFactory.Interfaces;
 
 namespace GatePassAPI;
 
@@ -52,8 +54,9 @@ public class LocalStartup(IConfiguration configuration)
 		services.AddScoped<IUserRepository, UserRepository>();
 
 		services.AddScoped<IEventRegistrationFinder, EventRegistrationFinder>();
+		
 		services.AddScoped<IParticipantFinder, ParticipantFinder>();
-
+		services.AddScoped<IParticipantFactory, ParticipantFactory>();
 
 		services.AddAuthentication(options =>
 		{

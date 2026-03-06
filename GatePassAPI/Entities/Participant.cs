@@ -6,6 +6,7 @@ public class Participant
 	public Guid VenueId { get; set; }
 	public required string FirstName { get; set; }
 	public required string LastName { get; set; }
-	public required Venue Venue { get; set; }
-	public ICollection<EventRegistration> Registrations { get; set; } = [];
+	public required DateTime CreatedAt { get; set; }
+	public Venue Venue { get; set; } = null!;
+	public ICollection<EventRegistration> Registrations { get; set; } = new List<EventRegistration>();
 }

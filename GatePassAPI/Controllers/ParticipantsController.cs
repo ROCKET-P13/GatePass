@@ -1,4 +1,7 @@
 using System.Security.Claims;
+using GatePassAPI.Controllers.DTOs;
+using GatePassAPI.Factories.ParticipantFactory.DTOs;
+using GatePassAPI.Factories.ParticipantFactory.Interfaces;
 using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
@@ -15,12 +18,14 @@ public class ParticipantsController
 (
 	IUserFinder userFinder,
 	IVenueFinder venueFinder,
-	IParticipantFinder participantFinder
+	IParticipantFinder participantFinder,
+	IParticipantFactory participantFactory
 ) : ControllerBase
 {
 	private readonly IUserFinder _userFinder = userFinder;
 	private readonly IVenueFinder _venueFinder = venueFinder;
 	private readonly IParticipantFinder _participantFinder = participantFinder;
+	private readonly IParticipantFactory _participantFactory = participantFactory;
 
 
 	[Authorize]
@@ -55,5 +60,52 @@ public class ParticipantsController
 
 		var participants = await _participantFinder.GetAll(venue.Id);
 		return Ok(participants);
+	}
+
+	[Authorize]
+	[HttpPost]
+	public async Task<IActionResult> Add([FromBody] AddParticipantRequest request)
+	{
+		if (request == null)
+		{
+			return BadRequest("Request body missing");
+		}
+
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return NotFound("User is not assigned to a venue");
+		}
+
+		var venue = await _venueFinder.GetById(user.VenueId);
+
+		if (venue == null)
+		{
+			return NotFound("Venue not found");
+		}
+
+		var participant = _participantFactory.FromDto(
+			new ParticipantFactoryDTO
+			{
+				VenueId = venue.Id,
+				FirstName = request.FirstName,
+				LastName = request.LastName
+			}
+		);
+
+		return Ok(participant);
 	}
 } 

@@ -118,6 +118,10 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -134,7 +138,7 @@ namespace GatePassAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VenueId");
+                    b.HasIndex("VenueId", "FirstName", "LastName");
 
                     b.ToTable("Participants", (string)null);
                 });

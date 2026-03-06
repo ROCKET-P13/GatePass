@@ -28,6 +28,8 @@ using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.EventRegistrationFinder;
 using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using GatePassAPI.Finders.ParticipantFinder;
+using GatePassAPI.Factories.ParticipantFactory.Interfaces;
+using GatePassAPI.Factories.ParticipantFactory;
 
 namespace GatePassAPI;
 
@@ -73,7 +75,8 @@ public class Startup(IConfiguration configuration)
 		services.AddScoped<IEventRegistrationFinder, EventRegistrationFinder>();
 
 		services.AddScoped<IParticipantFinder, ParticipantFinder>();
-
+		services.AddScoped<IParticipantFactory, ParticipantFactory>();
+		
 		services.AddAuthentication(options =>
 		{
 			options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

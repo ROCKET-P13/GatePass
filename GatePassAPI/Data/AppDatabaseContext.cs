@@ -63,8 +63,9 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.Property(e => e.VenueId).HasColumnName("venue_id");
 			entity.Property(e => e.FirstName).HasColumnName("first_name");
 			entity.Property(e => e.LastName).HasColumnName("last_name");
+			entity.Property(e => e.CreatedAt).HasColumnName("created_at");
 
-			entity.HasIndex(e => e.VenueId);
+			entity.HasIndex(e => new { e.VenueId, e.FirstName, e.LastName });
 		});
 
 		modelBuilder.Entity<EventRegistration>(entity =>

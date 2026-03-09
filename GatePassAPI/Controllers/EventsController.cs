@@ -3,10 +3,12 @@ using GatePassAPI.Controllers.DTOs;
 using GatePassAPI.Enums;
 using GatePassAPI.Factories.EventFactory.DTOs;
 using GatePassAPI.Factories.EventFactory.Interfaces;
+using GatePassAPI.Factories.EventRegistrationFactory.Interfaces;
 using GatePassAPI.Finders.EventFinder.Interfaces;
 using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
+using GatePassAPI.Repositories.EventRegistrationRepository.Interfaces;
 using GatePassAPI.Repositories.EventRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +25,9 @@ public class EventsController
 	IEventRepository eventRepository,
 	IUserFinder userFinder,
 	IVenueFinder venueFinder,
-	IEventRegistrationFinder eventRegistrationFinder
+	IEventRegistrationFinder eventRegistrationFinder,
+	IEventRegistrationFactory eventRegistrationFactory,
+	IEventRegistrationRepository eventRegistrationRepository
 ) : ControllerBase
 {
 	private readonly IEventFinder _eventFinder = eventFinder;
@@ -32,6 +36,8 @@ public class EventsController
 	private readonly IUserFinder _userFinder = userFinder;
 	private readonly IVenueFinder _venueFinder = venueFinder;
 	private readonly IEventRegistrationFinder _eventRegistrationFinder = eventRegistrationFinder;
+	private readonly IEventRegistrationFactory _eventRegistrationFactory = eventRegistrationFactory;
+	private readonly IEventRegistrationRepository _eventRegistrationRepository = eventRegistrationRepository;
 
 	[Authorize]
 	[HttpGet]
@@ -309,5 +315,48 @@ public class EventsController
 
 		var registrations = await _eventRegistrationFinder.GetByEventId(eventId);
 		return Ok(registrations);
+	}
+
+	[Authorize]
+	[HttpPost("{eventId:guid}/registrations")]
+	public async Task<IActionResult> RegisterParticipant(Guid eventId, [FromBody] RegisterParticipantRequest request)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+		
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return BadRequest("User is not assigned to a venue");
+		}
+
+		var eventEntity = await _eventFinder.GetById(eventId);
+
+		if (eventEntity == null)
+		{
+			return NotFound();
+		}
+
+		if (eventEntity.VenueId != user.VenueId)
+		{
+			return Forbid();
+		}
+
+		var eventRegistration = _eventRegistrationFactory.Create(eventId, request.ParticipantId);
+
+		await _eventRegistrationRepository.Upsert(eventRegistration);
+
+		return Ok(eventRegistration);
+
 	}
 }

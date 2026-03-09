@@ -9,14 +9,14 @@ public class EventRepository(AppDatabaseContext databaseContext) : IEventReposit
 {
 	private readonly AppDatabaseContext _databaseContext = databaseContext;
 
-	public async Task<Event> Upsert (Event eventEntity)
+	public async Task<Event> Upsert(Event eventEntity)
 	{
 		_databaseContext.Events.Add(eventEntity);
 		await _databaseContext.SaveChangesAsync();
 		return eventEntity;
 	}
 
-	public async Task Delete (Guid id)
+	public async Task Delete(Guid id)
 	{
 		var eventEntity = await _databaseContext.Events
 			.FirstOrDefaultAsync(e => e.Id == id);
@@ -31,13 +31,13 @@ public class EventRepository(AppDatabaseContext databaseContext) : IEventReposit
 		await _databaseContext.SaveChangesAsync();
 	}
 
-	public async Task<Event?> FindById (Guid id, Guid? venueId)
+	public async Task<Event?> FindById(Guid id, Guid? venueId)
 	{
 		return await _databaseContext.Events
 			.FirstOrDefaultAsync(e => e.Id == id && e.VenueId == venueId);
 	}
 
-	public async Task<Event> Update (Event eventEntity)
+	public async Task<Event> Update(Event eventEntity)
 	{
 		_databaseContext.Events.Update(eventEntity);
 		await _databaseContext.SaveChangesAsync();

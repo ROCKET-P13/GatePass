@@ -1,8 +1,8 @@
-using GatePassAPI.Entities;
+using GatePassAPI.Finders.EventRegistrationFinder.DTOs;
 
 namespace GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 
 public interface IEventRegistrationFinder
 {
-	Task<List<EventRegistration>> GetByEventId(Guid eventId);
+	Task<List<EventRegistrationViewModel>> GetByEventId(Guid eventId);
 }

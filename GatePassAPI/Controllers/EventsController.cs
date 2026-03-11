@@ -363,7 +363,7 @@ public class EventsController
 				CheckedIn = request.CheckedIn
 			}
 		);
-		
+
 		await _eventRegistrationRepository.Upsert(eventRegistration);
 
 		return Ok(eventRegistration);

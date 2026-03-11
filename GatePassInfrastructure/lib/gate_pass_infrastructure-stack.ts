@@ -71,7 +71,7 @@ export class GatePassInfrastructureStack extends cdk.Stack {
 				POSTGRES_SECRET_ARN: dbSecret.secretArn,
 				DB_HOST: dbInstance.dbInstanceEndpointAddress,
 				DB_PORT: dbInstance.dbInstanceEndpointPort,
-				DB_NAME: 'books',
+				DB_NAME: 'gatepass',
 			},
 		});
 

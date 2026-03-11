@@ -3,6 +3,7 @@ using GatePassAPI.Controllers.DTOs;
 using GatePassAPI.Enums;
 using GatePassAPI.Factories.EventFactory.DTOs;
 using GatePassAPI.Factories.EventFactory.Interfaces;
+using GatePassAPI.Factories.EventRegistrationFactory.DTOs;
 using GatePassAPI.Factories.EventRegistrationFactory.Interfaces;
 using GatePassAPI.Finders.EventFinder.Interfaces;
 using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
@@ -352,8 +353,17 @@ public class EventsController
 			return Forbid();
 		}
 
-		var eventRegistration = _eventRegistrationFactory.Create(eventId, request.ParticipantId);
-
+		var eventRegistration = _eventRegistrationFactory.Create(
+			new EventRegistrationFactoryCreateDTO
+			{
+				EventId = eventId,
+				ParticipantId = request.ParticipantId,
+				EventNumber = request.EventNumber,
+				Class = request.Class,
+				CheckedIn = request.CheckedIn
+			}
+		);
+		
 		await _eventRegistrationRepository.Upsert(eventRegistration);
 
 		return Ok(eventRegistration);

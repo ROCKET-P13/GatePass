@@ -76,6 +76,7 @@ namespace GatePassAPI.Migrations
                         .HasColumnName("event_id");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("gender");
 

@@ -15,7 +15,8 @@ public class EventRegistrationFactory : IEventRegistrationFactory
 			ParticipantId = dto.ParticipantId,
 			EventNumber = dto.EventNumber,
 			CheckedIn = dto.CheckedIn,
-			CreatedAt = DateTime.UtcNow
+			Type = dto.Type,
+			CreatedAt = DateTime.UtcNow,
 		};
 	}
 }

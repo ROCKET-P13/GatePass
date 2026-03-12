@@ -20,11 +20,12 @@ public class EventRegistrationFinder(AppDatabaseContext databaseContext) : IEven
 				ParticipantId = r.ParticipantId,
 				ParticipantFirstName = r.Participant.FirstName,
 				ParticipantLastName = r.Participant.LastName,
-				Class = r.Class,
+				Class = r.EventClass,
 				EventNumber = r.EventNumber,
 				CheckedIn = r.CheckedIn,
 				CreatedAt = r.CreatedAt,
-				CheckedInAt = r.CheckedInAt
+				CheckedInAt = r.CheckedInAt,
+				Type = r.Type
 			})
 			.ToListAsync();
 	}

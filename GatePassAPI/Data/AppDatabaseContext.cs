@@ -10,6 +10,7 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 	public DbSet<User> Users { get; set; }
 	public DbSet<Participant> Participants { get; set; }
 	public DbSet<EventRegistration> EventRegistrations { get; set; }
+	public DbSet<EventClass> EventClasses { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -74,7 +75,8 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.Property(e => e.Id).HasColumnName("id");
 			entity.Property(e => e.EventId).HasColumnName("event_id");
 			entity.Property(e => e.ParticipantId).HasColumnName("participant_id");
-			entity.Property(e => e.Class).HasColumnName("class");
+			entity.Property(e => e.Type).HasConversion<string>().HasColumnName("type");
+			entity.Property(e => e.EventClassId).HasColumnName("event_class_id");
 			entity.Property(e => e.EventNumber).HasColumnName("event_number");
 			entity.Property(e => e.CheckedIn).HasColumnName("checked_in");
 			entity.Property(e => e.CreatedAt).HasColumnName("created_at");
@@ -97,7 +99,29 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.HasIndex(e => e.ParticipantId);
 			entity.HasIndex(e => new { e.EventId, e.CheckedIn });
 			entity.HasIndex(e => new { e.EventId, e.Id });
+		});
 
+		modelBuilder.Entity<EventClass>(entity =>
+		{
+			entity.ToTable("EventClasses");
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.Name).HasColumnName("name");
+			entity.Property(e => e.EventId).HasColumnName("event_id");
+			entity.Property(e => e.MinimumAge).HasColumnName("minimum_age");
+			entity.Property(e => e.MaximumAge).HasColumnName("maximum_age");
+			entity.Property(e => e.SkillLevel).HasColumnName("skill_level");
+			entity.Property(e => e.Gender).HasColumnName("gender");
+			entity.Property(e => e.Capacity).HasColumnName("capacity");
+			entity.Property(e => e.StartTime).HasColumnName("start_time");
+
+			entity.HasOne(e => e.Event)
+				.WithMany(e => e.Classes)
+				.HasForeignKey(e => e.EventId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			entity.HasIndex(e => e.EventId);
+			entity.HasIndex(e => new { e.EventId, e.Name })
+				.IsUnique();
 		});
 	}
 }

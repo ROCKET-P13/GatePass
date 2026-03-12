@@ -4,13 +4,14 @@ namespace GatePassAPI.Entities;
 
 public class Event
 {
-	public Guid Id { get; set; }
+	public required Guid Id { get; set; }
 	public Guid VenueId { get; set; }
 	public required string Name { get; set; }
 	public DateTimeOffset StartDateTime { get; set; }
 	public required EventStatus Status { get; set; }
 	public int? ParticipantCapacity { get; set; }
-	public ICollection<EventRegistration> Registrations { get; set; } = [];
+	public ICollection<EventClass> Classes { get; set; } = new List<EventClass>();
+	public ICollection<EventRegistration> Registrations { get; set; } = new List<EventRegistration>();
 
 	public void Update(
 		string? name,

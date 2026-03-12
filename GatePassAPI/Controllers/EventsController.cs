@@ -359,8 +359,9 @@ public class EventsController
 				EventId = eventId,
 				ParticipantId = request.ParticipantId,
 				EventNumber = request.EventNumber,
-				Class = request.Class,
-				CheckedIn = request.CheckedIn
+				EventClassId = request.EventClassId,
+				CheckedIn = request.CheckedIn,
+				Type = request.Type,
 			}
 		);
 

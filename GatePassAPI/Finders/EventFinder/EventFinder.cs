@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using GatePassAPI.Data;
 using GatePassAPI.Entities;
 using GatePassAPI.Finders.EventFinder.Interfaces;
+using GatePassAPI.Finders.EventFinder.DTOs;
 
 namespace GatePassAPI.Finders.EventFinder;
 
@@ -9,12 +10,21 @@ public class EventFinder(AppDatabaseContext databaseContext) : IEventFinder
 {
 	private readonly AppDatabaseContext _databaseContext = databaseContext;
 
-	public async Task<List<Event>> GetAll()
+	public async Task<List<EventViewModel>> GetAll()
 	{
-		return await _databaseContext.Events.ToListAsync();
+		return await _databaseContext.Events
+			.Select(e => new EventViewModel
+			{
+				Id = e.Id,
+				Name = e.Name,
+				StartDateTime = e.StartDateTime,
+				Status = e.Status,
+				ParticipantCapacity = e.ParticipantCapacity,
+			})
+			.ToListAsync();
 	}
 
-	public async Task<List<Event>> GetByDateRange(Guid venueId, DateTime start, DateTime end)
+	public async Task<List<EventViewModel>> GetByDateRange(Guid venueId, DateTime start, DateTime end)
 	{
 		return await _databaseContext.Events
 			.Where(e => 
@@ -22,6 +32,14 @@ public class EventFinder(AppDatabaseContext databaseContext) : IEventFinder
 				e.StartDateTime >= start &&
 				e.StartDateTime < end
 			)
+			.Select(e => new EventViewModel
+			{
+				Id = e.Id,
+				Name = e.Name,
+				StartDateTime = e.StartDateTime,
+				Status = e.Status,
+				ParticipantCapacity = e.ParticipantCapacity,
+			})
 			.OrderBy(e => e.StartDateTime)
 			.ToListAsync();
 	}

@@ -60,6 +60,56 @@ namespace GatePassAPI.Migrations
                     b.ToTable("Events", (string)null);
                 });
 
+            modelBuilder.Entity("GatePassAPI.Entities.EventClass", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer")
+                        .HasColumnName("capacity");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("event_id");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("text")
+                        .HasColumnName("gender");
+
+                    b.Property<int?>("MaximumAge")
+                        .HasColumnType("integer")
+                        .HasColumnName("maximum_age");
+
+                    b.Property<int?>("MinimumAge")
+                        .HasColumnType("integer")
+                        .HasColumnName("minimum_age");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("SkillLevel")
+                        .HasColumnType("text")
+                        .HasColumnName("skill_level");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("EventId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("EventClasses", (string)null);
+                });
+
             modelBuilder.Entity("GatePassAPI.Entities.EventRegistration", b =>
                 {
                     b.Property<Guid>("Id")
@@ -75,13 +125,13 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("checked_in_at");
 
-                    b.Property<string>("Class")
-                        .HasColumnType("text")
-                        .HasColumnName("class");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<Guid?>("EventClassId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("event_class_id");
 
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid")
@@ -95,7 +145,14 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("participant_id");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("EventClassId");
 
                     b.HasIndex("EventId");
 
@@ -240,8 +297,23 @@ namespace GatePassAPI.Migrations
                     b.ToTable("Venues", (string)null);
                 });
 
+            modelBuilder.Entity("GatePassAPI.Entities.EventClass", b =>
+                {
+                    b.HasOne("GatePassAPI.Entities.Event", "Event")
+                        .WithMany("Classes")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("GatePassAPI.Entities.EventRegistration", b =>
                 {
+                    b.HasOne("GatePassAPI.Entities.EventClass", "EventClass")
+                        .WithMany("Registrations")
+                        .HasForeignKey("EventClassId");
+
                     b.HasOne("GatePassAPI.Entities.Event", "Event")
                         .WithMany("Registrations")
                         .HasForeignKey("EventId")
@@ -255,6 +327,8 @@ namespace GatePassAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
+
+                    b.Navigation("EventClass");
 
                     b.Navigation("Participant");
                 });
@@ -271,6 +345,13 @@ namespace GatePassAPI.Migrations
                 });
 
             modelBuilder.Entity("GatePassAPI.Entities.Event", b =>
+                {
+                    b.Navigation("Classes");
+
+                    b.Navigation("Registrations");
+                });
+
+            modelBuilder.Entity("GatePassAPI.Entities.EventClass", b =>
                 {
                     b.Navigation("Registrations");
                 });

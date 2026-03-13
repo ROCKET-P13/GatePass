@@ -412,7 +412,11 @@ public class EventsController
 			return Forbid();
 		}
 
-		if (request.Gender != Gender.Male || request.Gender != Gender.Female || request.Gender != Gender.Both)
+		if (
+			request.Gender != Gender.Male
+			&& request.Gender != Gender.Female
+			&& request.Gender != Gender.Both
+		)
 		{
 			return BadRequest("Gender is not valid");
 		}

@@ -82,14 +82,15 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.Property(e => e.CreatedAt).HasColumnName("created_at");
 			entity.Property(e => e.CheckedInAt).HasColumnName("checked_in_at");
 
-			entity.HasOne(e => e.Event)
+			entity.HasOne<Event>()
 				.WithMany(e => e.Registrations)
 				.HasForeignKey(e => e.EventId)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			entity.HasOne(e => e.Participant)
-				.WithMany(e => e.Registrations)
+				.WithMany(p => p.Registrations)
 				.HasForeignKey(e => e.ParticipantId)
+				.HasPrincipalKey(p => p.Id)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			entity.HasIndex(e => new { e.EventId, e.ParticipantId })
@@ -99,6 +100,9 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.HasIndex(e => e.ParticipantId);
 			entity.HasIndex(e => new { e.EventId, e.CheckedIn });
 			entity.HasIndex(e => new { e.EventId, e.Id });
+			
+			entity.HasIndex(e => new { e.EventId, e.EventNumber })
+				.IsUnique();
 		});
 
 		modelBuilder.Entity<EventClass>(entity =>
@@ -114,14 +118,17 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.Property(e => e.ParticipantCapacity).HasColumnName("participant_capacity");
 			entity.Property(e => e.StartTime).HasColumnName("start_time");
 
-			entity.HasOne(e => e.Event)
+			entity.HasOne<Event>()
 				.WithMany(e => e.Classes)
 				.HasForeignKey(e => e.EventId)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			entity.HasIndex(e => e.EventId);
-			entity.HasIndex(e => new { e.EventId, e.Name })
-				.IsUnique();
+			entity.HasMany(e => e.Registrations)
+				.WithOne()
+				.HasForeignKey(r => r.EventClassId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			entity.HasIndex(e => new { e.EventId, e.Name }).IsUnique();
 		});
 	}
 }

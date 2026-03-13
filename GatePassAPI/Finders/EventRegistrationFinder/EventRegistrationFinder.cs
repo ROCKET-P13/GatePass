@@ -20,7 +20,7 @@ public class EventRegistrationFinder(AppDatabaseContext databaseContext) : IEven
 				ParticipantId = r.ParticipantId,
 				ParticipantFirstName = r.Participant.FirstName,
 				ParticipantLastName = r.Participant.LastName,
-				Class = r.EventClass,
+				EventClassId = r.EventClassId,
 				EventNumber = r.EventNumber,
 				CheckedIn = r.CheckedIn,
 				CreatedAt = r.CreatedAt,

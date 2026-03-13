@@ -11,4 +11,5 @@ public class Venue
 	public required string City { get; set; }
 	public required string State { get; set; }
 	public required string Country { get; set; }
+	public ICollection<Event> Events { get; set; } = new List<Event>();
 }

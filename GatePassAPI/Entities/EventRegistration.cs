@@ -6,7 +6,6 @@ public class EventRegistration
 {
 	public required Guid Id { get; set; }
 	public required Guid EventId { get; set; }
-	public Event Event { get; set; } = null!;
 	public required Guid ParticipantId { get; set; }
 	public Participant Participant { get; set; } = null!;
 	public required EventRegistrationType Type { get; set; }
@@ -15,7 +14,6 @@ public class EventRegistration
 	public required DateTime CreatedAt { get; set; }
 	public DateTime? CheckedInAt { get; set; }
 	public Guid? EventClassId { get; set; }
-	public EventClass? EventClass { get; set; }
 	
 	public void CheckIn()
 	{

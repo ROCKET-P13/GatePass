@@ -111,7 +111,7 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 			entity.Property(e => e.MaximumAge).HasColumnName("maximum_age");
 			entity.Property(e => e.SkillLevel).HasColumnName("skill_level");
 			entity.Property(e => e.Gender).HasConversion<string>().HasColumnName("gender");
-			entity.Property(e => e.Capacity).HasColumnName("capacity");
+			entity.Property(e => e.ParticipantCapacity).HasColumnName("participant_capacity");
 			entity.Property(e => e.StartTime).HasColumnName("start_time");
 
 			entity.HasOne(e => e.Event)

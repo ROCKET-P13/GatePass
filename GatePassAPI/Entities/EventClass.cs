@@ -11,8 +11,8 @@ public class EventClass
 	public int? MinimumAge { get; set; }
 	public int? MaximumAge { get; set; }
 	public string? SkillLevel { get; set; }
-	public Genders Gender { get; set; }
-	public int Capacity { get; set; }
+	public Gender Gender { get; set; }
+	public int? ParticipantCapacity { get; set; }
 	public DateTime? StartTime { get; set; }
 	public ICollection<EventRegistration> Registrations { get; set; } = new List<EventRegistration>();
 }

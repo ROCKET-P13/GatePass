@@ -67,10 +67,6 @@ namespace GatePassAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<int>("Capacity")
-                        .HasColumnType("integer")
-                        .HasColumnName("capacity");
-
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid")
                         .HasColumnName("event_id");
@@ -92,6 +88,10 @@ namespace GatePassAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<int?>("ParticipantCapacity")
+                        .HasColumnType("integer")
+                        .HasColumnName("participant_capacity");
 
                     b.Property<string>("SkillLevel")
                         .HasColumnType("text")

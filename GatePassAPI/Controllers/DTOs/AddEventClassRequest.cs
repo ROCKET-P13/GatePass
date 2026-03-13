@@ -8,7 +8,7 @@ public class AddEventClassRequest
 	public Gender Gender { get; set; }
 	public string? SkillLevel { get; set; }
 	public int? MaximumAge { get; set; }
-	public int? MininumAge { get; set; }
+	public int? MinimumAge { get; set; }
 	public int? ParticipantCapacity { get; set; }
 
 }

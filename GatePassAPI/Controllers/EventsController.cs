@@ -426,7 +426,7 @@ public class EventsController
 			EventId = eventId,
 			Name = request.Name,
 			MaximumAge = request.MaximumAge,
-			MinimumAge = request.MininumAge,
+			MinimumAge = request.MinimumAge,
 			SkillLevel = request.SkillLevel,
 			Gender = request.Gender,
 			ParticipantCapacity = request.ParticipantCapacity

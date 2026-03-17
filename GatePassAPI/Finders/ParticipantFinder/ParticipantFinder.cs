@@ -1,4 +1,5 @@
 using GatePassAPI.Data;
+using GatePassAPI.Entities;
 using GatePassAPI.Finders.ParticipantFinder.DTOs;
 using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,5 +24,11 @@ public class ParticipantFinder(AppDatabaseContext databaseContext) : IParticipan
 			.ToListAsync();
 
 		return participants; 
+	}
+
+	public async Task<Participant?> GetById (Guid participantId)
+	{
+		return await _databaseContext.Participants
+			.FirstOrDefaultAsync(p => p.Id == participantId);
 	}
 }

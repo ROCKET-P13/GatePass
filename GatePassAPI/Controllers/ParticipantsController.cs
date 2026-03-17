@@ -66,6 +66,40 @@ public class ParticipantsController
 	}
 
 	[Authorize]
+	[HttpGet("{participantId:guid}")]
+	public async Task<IActionResult> GetById (Guid participantId)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return NotFound("User is not assigned to a venue");
+		}
+
+		var venue = await _venueFinder.GetById(user.VenueId);
+
+		if (venue == null)
+		{
+			return NotFound("Venue not found");
+		}
+
+		var participant = await _participantFinder.GetById(participantId);
+		return Ok(participant);
+	}
+
+	[Authorize]
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] AddParticipantRequest request)
 	{

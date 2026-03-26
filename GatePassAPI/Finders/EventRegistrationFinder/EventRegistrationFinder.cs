@@ -12,21 +12,45 @@ public class EventRegistrationFinder(AppDatabaseContext databaseContext) : IEven
 	public async Task<List<EventRegistrationViewModel>> GetByEventId(Guid eventId)
 	{
 		return await _databaseContext.EventRegistrations
-			.Where(r => r.EventId == eventId)
-			.Include(r => r.Participant)
-			.Select(r => new EventRegistrationViewModel
+			.Where(registration => registration.EventId == eventId)
+			.Include(registration => registration.Participant)
+			.Select(registration => new EventRegistrationViewModel
 			{
-				Id = r.Id,
-				ParticipantId = r.ParticipantId,
-				ParticipantFirstName = r.Participant.FirstName,
-				ParticipantLastName = r.Participant.LastName,
-				EventClassId = r.EventClassId,
-				EventNumber = r.EventNumber,
-				CheckedIn = r.CheckedIn,
-				CreatedAt = r.CreatedAt,
-				CheckedInAt = r.CheckedInAt,
-				Type = r.Type
+				Id = registration.Id,
+				ParticipantId = registration.ParticipantId,
+				ParticipantFirstName = registration.Participant.FirstName,
+				ParticipantLastName = registration.Participant.LastName,
+				EventClassId = registration.EventClassId,
+				EventNumber = registration.EventNumber,
+				CheckedIn = registration.CheckedIn,
+				CreatedAt = registration.CreatedAt,
+				CheckedInAt = registration.CheckedInAt,
+				Type = registration.Type
 			})
+			.ToListAsync();
+	}
+
+	public async Task<List<ParticipantRegistrationViewModel>> GetByParticipantId(Guid participantId)
+	{
+		return await _databaseContext.EventRegistrations
+			.Where(registration => registration.ParticipantId == participantId)
+			.Join(
+				_databaseContext.Events,
+				registration => registration.EventId,
+				venueEvent => venueEvent.Id,
+				(registration, venueEvent) => new ParticipantRegistrationViewModel
+					{
+						Id = registration.Id,
+						EventId = registration.EventId,
+						EventDate = venueEvent.StartDateTime,
+						EventName = venueEvent.Name,
+						Type = registration.Type,
+						EventNumber = registration.EventNumber,
+						CreatedAt = registration.CreatedAt,
+						CheckedIn = registration.CheckedIn,
+						CheckedInAt = registration.CheckedInAt
+					}
+			)
 			.ToListAsync();
 	}
 }

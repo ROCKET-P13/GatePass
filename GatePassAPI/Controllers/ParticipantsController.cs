@@ -2,6 +2,7 @@ using System.Security.Claims;
 using GatePassAPI.Controllers.DTOs;
 using GatePassAPI.Factories.ParticipantFactory.DTOs;
 using GatePassAPI.Factories.ParticipantFactory.Interfaces;
+using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.ParticipantFinder.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
@@ -21,7 +22,8 @@ public class ParticipantsController
 	IVenueFinder venueFinder,
 	IParticipantFinder participantFinder,
 	IParticipantFactory participantFactory,
-	IParticipantRepository participantRepository
+	IParticipantRepository participantRepository,
+	IEventRegistrationFinder eventRegistrationFinder
 ) : ControllerBase
 {
 	private readonly IUserFinder _userFinder = userFinder;
@@ -29,6 +31,7 @@ public class ParticipantsController
 	private readonly IParticipantFinder _participantFinder = participantFinder;
 	private readonly IParticipantFactory _participantFactory = participantFactory;
 	private readonly IParticipantRepository _participantRepository = participantRepository;
+	private readonly IEventRegistrationFinder _eventRegistrationFinder = eventRegistrationFinder;
 
 
 	[Authorize]
@@ -97,6 +100,40 @@ public class ParticipantsController
 
 		var participant = await _participantFinder.GetById(participantId);
 		return Ok(participant);
+	}
+
+	[Authorize]
+	[HttpGet("{participantId:guid}/registrations")]
+	public async Task<IActionResult> GetRegistrations (Guid participantId)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return NotFound("User is not assigned to a venue");
+		}
+
+		var venue = await _venueFinder.GetById(user.VenueId);
+
+		if (venue == null)
+		{
+			return NotFound("Venue not found");
+		}
+
+		var participantRegistrations = await _eventRegistrationFinder.GetByParticipantId(participantId);
+		return Ok(participantRegistrations);
 	}
 
 	[Authorize]

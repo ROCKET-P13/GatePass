@@ -4,7 +4,7 @@ namespace GatePassAPI.Entities;
 
 public class EventRegistration
 {
-	public required Guid Id { get; set; }
+	public Guid Id { get; set; }
 	public required Guid EventId { get; set; }
 	public required Guid ParticipantId { get; set; }
 	public Participant Participant { get; set; } = null!;

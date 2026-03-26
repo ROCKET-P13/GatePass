@@ -5,4 +5,5 @@ namespace GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 public interface IEventRegistrationFinder
 {
 	Task<List<EventRegistrationViewModel>> GetByEventId(Guid eventId);
+	Task<List<ParticipantRegistrationViewModel>> GetByParticipantId(Guid participantId);
 }

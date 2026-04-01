@@ -9,6 +9,7 @@ public class EventRegistrationViewModel
 	public required string ParticipantFirstName { get; set; }
 	public required string ParticipantLastName { get; set; }
 	public Guid? EventClassId { get; set; }
+	public string? EventClassName { get; set; }
 	public required EventRegistrationType Type { get; set; }
 	public int? EventNumber { get; set; }
 	public required bool CheckedIn { get; set; }

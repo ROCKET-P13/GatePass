@@ -14,20 +14,28 @@ public class EventRegistrationFinder(AppDatabaseContext databaseContext) : IEven
 		return await _databaseContext.EventRegistrations
 			.Where(registration => registration.EventId == eventId)
 			.Include(registration => registration.Participant)
-			.Select(registration => new EventRegistrationViewModel
-			{
-				Id = registration.Id,
-				ParticipantId = registration.ParticipantId,
-				ParticipantFirstName = registration.Participant.FirstName,
-				ParticipantLastName = registration.Participant.LastName,
-				EventClassId = registration.EventClassId,
-				EventNumber = registration.EventNumber,
-				CheckedIn = registration.CheckedIn,
-				CreatedAt = registration.CreatedAt,
-				CheckedInAt = registration.CheckedInAt,
-				Type = registration.Type
-			})
-			.ToListAsync();
+			.GroupJoin(
+				_databaseContext.EventClasses,
+				registration => registration.EventClassId,
+				eventClass => eventClass.Id,
+				(registration, eventClasses) => new { registration, eventClasses }
+			)
+			.SelectMany(
+				x => x.eventClasses.DefaultIfEmpty(),
+				(x, eventClass) => new EventRegistrationViewModel
+				{
+					Id = x.registration.Id,
+					ParticipantId = x.registration.ParticipantId,
+					ParticipantFirstName = x.registration.Participant.FirstName,
+					ParticipantLastName = x.registration.Participant.LastName,
+					EventClassId = x.registration.EventClassId,
+					EventClassName = eventClass != null ? eventClass.Name : null,
+					EventNumber = x.registration.EventNumber,
+					CheckedIn = x.registration.CheckedIn,
+					CheckedInAt = x.registration.CheckedInAt,
+					Type = x.registration.Type,
+				}
+			).ToListAsync();
 	}
 
 	public async Task<List<ParticipantRegistrationViewModel>> GetByParticipantId(Guid participantId)
@@ -54,26 +62,32 @@ public class EventRegistrationFinder(AppDatabaseContext databaseContext) : IEven
 			.ToListAsync();
 	}
 
-	public async Task<List<ParticipantRegistrationViewModel>> GetCheckinsByEventId(Guid eventId)
+	public async Task<List<EventRegistrationViewModel>> GetCheckinsByEventId(Guid eventId)
 	{
 		return await _databaseContext.EventRegistrations
-			.Where(registration => registration.EventId == eventId && registration.CheckedIn)
-			.Join(
-				_databaseContext.Events,
-				registration => registration.EventId,
-				venueEvent => venueEvent.Id,
-				(registration, venueEvent) => new ParticipantRegistrationViewModel
-					{
-						Id = registration.Id,
-						EventId = registration.EventId,
-						EventDate = venueEvent.StartDateTime,
-						EventName = venueEvent.Name,
-						Type = registration.Type,
-						EventNumber = registration.EventNumber,
-						CreatedAt = registration.CreatedAt,
-						CheckedIn = registration.CheckedIn,
-						CheckedInAt = registration.CheckedInAt
-					}
+			.Where(registration => registration.EventId == eventId)
+			.Include(registration => registration.Participant)
+			.GroupJoin(
+				_databaseContext.EventClasses,
+				registration => registration.EventClassId,
+				eventClass => eventClass.Id,
+				(registration, eventClasses) => new { registration, eventClasses }
+			)
+			.SelectMany(
+				x => x.eventClasses.DefaultIfEmpty(),
+				(x, eventClass) => new EventRegistrationViewModel
+				{
+					Id = x.registration.Id,
+					ParticipantId = x.registration.ParticipantId,
+					ParticipantFirstName = x.registration.Participant.FirstName,
+					ParticipantLastName = x.registration.Participant.LastName,
+					EventClassId = x.registration.EventClassId,
+					EventClassName = eventClass != null ? eventClass.Name : null,
+					EventNumber = x.registration.EventNumber,
+					CheckedIn = x.registration.CheckedIn,
+					CheckedInAt = x.registration.CheckedInAt,
+					Type = x.registration.Type,
+				}
 			)
 			.ToListAsync();
 	}

@@ -12,6 +12,7 @@ using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
 using GatePassAPI.Finders.VenueFinder.Interfaces;
 using GatePassAPI.Repositories.EventClassRepository.Interfaces;
+using GatePassAPI.Repositories.EventRegistrationRepository.DTOs;
 using GatePassAPI.Repositories.EventRegistrationRepository.Interfaces;
 using GatePassAPI.Repositories.EventRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -250,38 +251,9 @@ public class EventsController
 	[HttpDelete("{eventId:guid}")]
 	public async Task<IActionResult> DeleteEvent(Guid eventId)
 	{
-		var auth0Id = User.FindFirstValue("sub");
+		await ValidateRequestElseThrow(eventId);
 
-		if (string.IsNullOrWhiteSpace(auth0Id))
-		{
-			return Unauthorized();
-		}
-
-		var user = await _userFinder.GetByAuth0Id(auth0Id);
-		
-		if (user == null)
-		{
-			return NotFound("User not found");
-		}
-
-		if (user.VenueId == null)
-		{
-			return BadRequest("User is not assigned to a venue");
-		}
-
-		var eventEntity = await _eventFinder.GetById(eventId);
-
-		if (eventEntity == null)
-		{
-			return NotFound();
-		}
-
-		if (eventEntity.VenueId != user.VenueId)
-		{
-			return Forbid();
-		}
-
-		await _eventRepository.Delete(eventEntity.Id);
+		await _eventRepository.Delete(eventId);
 
 		return NoContent();
 	}
@@ -290,36 +262,7 @@ public class EventsController
 	[HttpGet("{eventId:guid}/registrations")]
 	public async Task<IActionResult> GetRegistrations(Guid eventId)
 	{
-		var auth0Id = User.FindFirstValue("sub");
-
-		if (string.IsNullOrWhiteSpace(auth0Id))
-		{
-			return Unauthorized();
-		}
-
-		var user = await _userFinder.GetByAuth0Id(auth0Id);
-		
-		if (user == null)
-		{
-			return NotFound("User not found");
-		}
-
-		if (user.VenueId == null)
-		{
-			return BadRequest("User is not assigned to a venue");
-		}
-
-		var eventEntity = await _eventFinder.GetById(eventId);
-
-		if (eventEntity == null)
-		{
-			return NotFound();
-		}
-
-		if (eventEntity.VenueId != user.VenueId)
-		{
-			return Forbid();
-		}
+		await ValidateRequestElseThrow(eventId);
 
 		var registrations = await _eventRegistrationFinder.GetByEventId(eventId);
 		return Ok(registrations);
@@ -329,36 +272,7 @@ public class EventsController
 	[HttpGet("{eventId:guid}/checkins")]
 	public async Task<IActionResult> GetCheckins(Guid eventId)
 	{
-		var auth0Id = User.FindFirstValue("sub");
-
-		if (string.IsNullOrWhiteSpace(auth0Id))
-		{
-			return Unauthorized();
-		}
-
-		var user = await _userFinder.GetByAuth0Id(auth0Id);
-		
-		if (user == null)
-		{
-			return NotFound("User not found");
-		}
-
-		if (user.VenueId == null)
-		{
-			return BadRequest("User is not assigned to a venue");
-		}
-
-		var eventEntity = await _eventFinder.GetById(eventId);
-
-		if (eventEntity == null)
-		{
-			return NotFound();
-		}
-
-		if (eventEntity.VenueId != user.VenueId)
-		{
-			return Forbid();
-		}
+		await ValidateRequestElseThrow(eventId);
 
 		var checkIns = await _eventRegistrationFinder.GetCheckinsByEventId(eventId);
 
@@ -369,36 +283,7 @@ public class EventsController
 	[HttpPost("{eventId:guid}/registrations")]
 	public async Task<IActionResult> RegisterParticipant(Guid eventId, [FromBody] RegisterParticipantRequest request)
 	{
-		var auth0Id = User.FindFirstValue("sub");
-
-		if (string.IsNullOrWhiteSpace(auth0Id))
-		{
-			return Unauthorized();
-		}
-
-		var user = await _userFinder.GetByAuth0Id(auth0Id);
-		
-		if (user == null)
-		{
-			return NotFound("User not found");
-		}
-
-		if (user.VenueId == null)
-		{
-			return BadRequest("User is not assigned to a venue");
-		}
-
-		var eventEntity = await _eventFinder.GetById(eventId);
-
-		if (eventEntity == null)
-		{
-			return NotFound();
-		}
-
-		if (eventEntity.VenueId != user.VenueId)
-		{
-			return Forbid();
-		}
+		await ValidateRequestElseThrow(eventId);
 
 		var eventRegistration = _eventRegistrationFactory.Create(
 			new EventRegistrationFactoryCreateDTO
@@ -475,6 +360,65 @@ public class EventsController
 		await _eventClassRepository.Upsert(eventClass);
 
 		return Ok(eventClass);
+	}
 
+	[Authorize]
+	[HttpPost("{eventId:guid}/checkins")]
+	public async Task<IActionResult> CheckinParticipant(Guid eventId, [FromBody] CheckinParticipantRequest request)
+	{
+		await ValidateRequestElseThrow(eventId);
+
+		var eventRegistration = await _eventRegistrationRepository.GetBy(new EventRegistrationRepositoryGetByDTO
+		{
+			EventId = eventId,
+			ParticipantId = request.ParticipantId
+		});
+
+		if (eventRegistration == null)
+		{
+			return NotFound("Event Registration not found");
+		}
+
+		eventRegistration.CheckIn();
+
+		await _eventRegistrationRepository.Upsert(eventRegistration);
+
+		return Ok(eventRegistration);
+	}
+
+	private async Task<IActionResult?> ValidateRequestElseThrow(Guid eventId)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+		
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return BadRequest("User is not assigned to a venue");
+		}
+
+		var eventEntity = await _eventFinder.GetById(eventId);
+
+		if (eventEntity == null)
+		{
+			return NotFound();
+		}
+
+		if (eventEntity.VenueId != user.VenueId)
+		{
+			return Forbid();
+		}
+
+		return null;
 	}
 }

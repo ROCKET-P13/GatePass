@@ -326,6 +326,46 @@ public class EventsController
 	}
 
 	[Authorize]
+	[HttpGet("{eventId:guid}/checkins")]
+	public async Task<IActionResult> GetCheckins(Guid eventId)
+	{
+		var auth0Id = User.FindFirstValue("sub");
+
+		if (string.IsNullOrWhiteSpace(auth0Id))
+		{
+			return Unauthorized();
+		}
+
+		var user = await _userFinder.GetByAuth0Id(auth0Id);
+		
+		if (user == null)
+		{
+			return NotFound("User not found");
+		}
+
+		if (user.VenueId == null)
+		{
+			return BadRequest("User is not assigned to a venue");
+		}
+
+		var eventEntity = await _eventFinder.GetById(eventId);
+
+		if (eventEntity == null)
+		{
+			return NotFound();
+		}
+
+		if (eventEntity.VenueId != user.VenueId)
+		{
+			return Forbid();
+		}
+
+		var checkIns = await _eventRegistrationFinder.GetCheckinsByEventId(eventId);
+
+		return Ok(checkIns);
+	}
+
+	[Authorize]
 	[HttpPost("{eventId:guid}/registrations")]
 	public async Task<IActionResult> RegisterParticipant(Guid eventId, [FromBody] RegisterParticipantRequest request)
 	{

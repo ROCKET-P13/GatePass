@@ -7,6 +7,7 @@ using GatePassAPI.Factories.EventFactory.DTOs;
 using GatePassAPI.Factories.EventFactory.Interfaces;
 using GatePassAPI.Factories.EventRegistrationFactory.DTOs;
 using GatePassAPI.Factories.EventRegistrationFactory.Interfaces;
+using GatePassAPI.Finders.EventClassFinder.Interfaces;
 using GatePassAPI.Finders.EventFinder.Interfaces;
 using GatePassAPI.Finders.EventRegistrationFinder.Interfaces;
 using GatePassAPI.Finders.UserFinder.Interfaces;
@@ -34,7 +35,8 @@ public class EventsController
 	IEventRegistrationFactory eventRegistrationFactory,
 	IEventRegistrationRepository eventRegistrationRepository,
 	IEventClassFactory eventClassFactory,
-	IEventClassRepository eventClassRepository
+	IEventClassRepository eventClassRepository,
+	IEventClassFinder eventClassFinder
 ) : ControllerBase
 {
 	private readonly IEventFinder _eventFinder = eventFinder;
@@ -47,6 +49,7 @@ public class EventsController
 	private readonly IEventRegistrationRepository _eventRegistrationRepository = eventRegistrationRepository;
 	private readonly IEventClassFactory _eventClassFactory = eventClassFactory;
 	private readonly IEventClassRepository _eventClassRepository = eventClassRepository;
+	private readonly IEventClassFinder _eventClassFinder = eventClassFinder;
 
 	[Authorize]
 	[HttpGet]
@@ -384,6 +387,18 @@ public class EventsController
 		await _eventRegistrationRepository.Upsert(eventRegistration);
 
 		return Ok(eventRegistration);
+	}
+
+	[Authorize]
+	[HttpGet("{eventId:guid}/classes")]
+	public async Task<IActionResult> GetEventClasses(Guid eventId)
+	{
+		await ValidateRequestElseThrow(eventId);
+
+		var eventClasses = await _eventClassFinder.GetByEventId(eventId);
+
+		return Ok(eventClasses);
+
 	}
 
 	private async Task<IActionResult?> ValidateRequestElseThrow(Guid eventId)

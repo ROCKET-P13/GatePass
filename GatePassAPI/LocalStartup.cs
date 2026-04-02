@@ -37,6 +37,8 @@ using GatePassAPI.Factories.EventClassFactory.Interfaces;
 using GatePassAPI.Factories.EventClassFactory;
 using GatePassAPI.Repositories.EventClassRepository.Interfaces;
 using GatePassAPI.Repositories.EventClassRepository;
+using GatePassAPI.Finders.EventClassFinder.Interfaces;
+using GatePassAPI.Finders.EventClassFinder;
 
 namespace GatePassAPI;
 
@@ -71,6 +73,7 @@ public class LocalStartup(IConfiguration configuration)
 		services.AddScoped<IParticipantFactory, ParticipantFactory>();
 		services.AddScoped<IParticipantRepository, ParticipantRepository>();
 
+		services.AddScoped<IEventClassFinder, EventClassFinder>();
 		services.AddScoped<IEventClassFactory, EventClassFactory>();
 		services.AddScoped<IEventClassRepository, EventClassRepository>();
 

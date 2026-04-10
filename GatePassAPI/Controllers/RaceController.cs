@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GatePassAPI.Controllers;
 
 [ApiController]
-[Route("api/events/{eventId}/race")]
+[Route("api/events/{eventId:guid}/race")]
 [Authorize]
 public class RaceController
 (
@@ -26,7 +26,7 @@ public class RaceController
 	private readonly IMotoEntryRepository _motoEntryRepository = motoEntryRepository;
 	private readonly IMotoFinder _motoFinder = motoFinder;
 
-	[HttpPost("classes/{eventClassId}/motos/generate")]
+	[HttpPost("classes/{eventClassId:guid}/motos/generate")]
 	public async Task<IActionResult> GenerateMotos(Guid eventId, Guid eventClassId,[FromBody] GenerateMotosRequest request)
 	{
 		var existingMotos = await _motoFinder.GetByEventClassId(eventClassId);

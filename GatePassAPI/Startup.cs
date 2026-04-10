@@ -137,6 +137,13 @@ public class Startup(IConfiguration configuration)
             app.UseDeveloperExceptionPage();
         }
 
+		if (!env.IsEnvironment("DesignTime"))
+		{
+			using var scope = app.ApplicationServices.CreateScope();
+			var db = scope.ServiceProvider.GetRequiredService<AppDatabaseContext>();
+			db.Database.Migrate();
+		}
+
 		using (var scope = app.ApplicationServices.CreateScope())
 		{
 			var db = scope.ServiceProvider.GetRequiredService<AppDatabaseContext>();

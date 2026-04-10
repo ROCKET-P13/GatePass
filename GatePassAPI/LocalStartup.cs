@@ -111,16 +111,17 @@ public class LocalStartup(IConfiguration configuration)
 			});
     }
 
-	public void Configure(IApplicationBuilder app)
+	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
 
 		app.UseDeveloperExceptionPage();
 
-		using (var scope = app.ApplicationServices.CreateScope())
+		if (!env.IsEnvironment("DesignTime"))
 		{
+			using var scope = app.ApplicationServices.CreateScope();
 			var db = scope.ServiceProvider.GetRequiredService<AppDatabaseContext>();
 			db.Database.Migrate();
-		}
+		}		
 
         app.UseRouting();
 		app.UseAuthentication();

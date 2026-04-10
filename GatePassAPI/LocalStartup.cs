@@ -39,6 +39,14 @@ using GatePassAPI.Repositories.EventClassRepository.Interfaces;
 using GatePassAPI.Repositories.EventClassRepository;
 using GatePassAPI.Finders.EventClassFinder.Interfaces;
 using GatePassAPI.Finders.EventClassFinder;
+using GatePassAPI.Finders.MotoFinder.Interfaces;
+using GatePassAPI.Finders.MotoFinder;
+using GatePassAPI.Factories.MotoFactory.Interfaces;
+using GatePassAPI.Factories.MotoFactory;
+using GatePassAPI.Repositories.MotoRepository.Interfaces;
+using GatePassAPI.Repositories.MotoRepository;
+using GatePassAPI.Repositories.MotoEntryRepository.Interfaces;
+using GatePassAPI.Repositories.MotoEntryRepository;
 
 namespace GatePassAPI;
 
@@ -76,6 +84,12 @@ public class LocalStartup(IConfiguration configuration)
 		services.AddScoped<IEventClassFinder, EventClassFinder>();
 		services.AddScoped<IEventClassFactory, EventClassFactory>();
 		services.AddScoped<IEventClassRepository, EventClassRepository>();
+
+		services.AddScoped<IMotoFinder, MotoFinder>();
+		services.AddScoped<IMotoFactory, MotoFactory>();
+		services.AddScoped<IMotoRepository, MotoRepository>();
+
+		services.AddScoped<IMotoEntryRepository, MotoEntryRepository>();
 
 		services.AddAuthentication(options =>
 		{

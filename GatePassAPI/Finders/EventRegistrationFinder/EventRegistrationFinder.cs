@@ -91,4 +91,28 @@ public class EventRegistrationFinder(AppDatabaseContext databaseContext) : IEven
 			)
 			.ToListAsync();
 	}
+
+	public async Task<List<ParticipantRegistrationViewModel>> GetByEventClassId(Guid eventClassId)
+	{
+		return await _databaseContext.EventRegistrations
+			.Where(registration => registration.EventClassId == eventClassId)
+			.Join(
+				_databaseContext.Events,
+				registration => registration.EventId,
+				venueEvent => venueEvent.Id,
+				(registration, venueEvent) => new ParticipantRegistrationViewModel
+					{
+						Id = registration.Id,
+						EventId = registration.EventId,
+						EventDate = venueEvent.StartDateTime,
+						EventName = venueEvent.Name,
+						Type = registration.Type,
+						EventNumber = registration.EventNumber,
+						CreatedAt = registration.CreatedAt,
+						CheckedIn = registration.CheckedIn,
+						CheckedInAt = registration.CheckedInAt
+					}
+			)
+			.ToListAsync();
+	}
 }

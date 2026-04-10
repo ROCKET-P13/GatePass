@@ -1,4 +1,5 @@
 using GatePassAPI.Data;
+using GatePassAPI.Entities;
 using GatePassAPI.Finders.EventClassFinder.DTOs;
 using GatePassAPI.Finders.EventClassFinder.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -24,5 +25,12 @@ public class EventClassFinder(AppDatabaseContext databaseContext) : IEventClassF
 				StartTime = eventClass.StartTime
 			})
 			.ToListAsync();
+	}
+
+	public async Task<EventClass?> GetById(Guid id)
+	{
+		return await _databaseContext.EventClasses
+			.Where(eventClass => eventClass.Id == id)
+			.FirstOrDefaultAsync();
 	}
 }

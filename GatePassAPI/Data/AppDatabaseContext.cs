@@ -11,6 +11,8 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 	public DbSet<Participant> Participants { get; set; }
 	public DbSet<EventRegistration> EventRegistrations { get; set; }
 	public DbSet<EventClass> EventClasses { get; set; }
+	public DbSet<Moto> Motos { get; set; }
+	public DbSet<MotoEntry> MotoEntries { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -93,7 +95,7 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 				.HasPrincipalKey(p => p.Id)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			entity.HasIndex(e => new { e.EventId, e.ParticipantId })
+			entity.HasIndex(e => new { e.EventId, e.ParticipantId, e.EventClassId })
 				.IsUnique();
 
 			entity.HasIndex(e => e.EventId);
@@ -129,6 +131,46 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
 				.OnDelete(DeleteBehavior.Cascade);
 
 			entity.HasIndex(e => new { e.EventId, e.Name }).IsUnique();
+		});
+
+		modelBuilder.Entity<Moto>(entity =>
+		{
+			entity.ToTable("Motos");
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.MotoNumber).HasColumnName("moto_number");
+			entity.Property(e => e.Type).HasConversion<string>().HasColumnName("type");
+			entity.Property(e => e.Status).HasConversion<string>().HasColumnName("status");
+			entity.Property(e => e.StartTime).HasColumnName("start_time");
+
+			entity.HasOne(e => e.EventClass)
+				.WithMany(eventClass => eventClass.Motos)
+				.HasForeignKey(moto => moto.EventClassId);
+
+			entity.HasIndex(e => e.EventClassId);
+			entity.HasIndex(e => new { e.EventClassId, e.MotoNumber }).IsUnique();
+		});
+
+		modelBuilder.Entity<MotoEntry>(entity =>
+		{
+			entity.ToTable("MotoEntries");
+			entity.Property(e => e.Id).HasColumnName("id");
+			entity.Property(e => e.MotoId).HasColumnName("moto_id");
+			entity.Property(e => e.EventRegistrationId).HasColumnName("registration_id");
+			entity.Property(e => e.GatePick).HasColumnName("gate_pick");
+			entity.Property(e => e.FinishPosition).HasColumnName("finish_position");
+			entity.Property(e => e.Points).HasColumnName("points");
+
+			entity.HasOne(e => e.Moto)
+				.WithMany(moto => moto.Entries)
+				.HasForeignKey(motoEntry => motoEntry.MotoId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			entity.HasOne(e => e.EventRegistration)
+				.WithMany()
+				.HasForeignKey(motoEntry => motoEntry.EventRegistrationId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			entity.HasIndex(e => new { e.MotoId, e.GatePick });
 		});
 	}
 }

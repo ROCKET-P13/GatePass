@@ -17,13 +17,11 @@ public class VenuesController
 (
 	IVenueFactory venueFactory,
 	IVenueRepository venueRepository,
-	IVenueFinder venueFinder,
 	IUserRepository userRepository
 ) : ControllerBase
 {
 	private readonly IVenueFactory _venueFactory = venueFactory;
 	private readonly IVenueRepository _venueRepository = venueRepository;
-	private readonly IVenueFinder _venueFinder = venueFinder;
 	private readonly IUserRepository _userRepository = userRepository;
 
 	[Authorize]

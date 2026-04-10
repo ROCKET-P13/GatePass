@@ -14,4 +14,5 @@ public class EventClass
 	public int? ParticipantCapacity { get; set; }
 	public DateTime? StartTime { get; set; }
 	public ICollection<EventRegistration> Registrations { get; set; } = new List<EventRegistration>();
+	public ICollection<Moto> Motos { get; set; } = new List<Moto>();
 }

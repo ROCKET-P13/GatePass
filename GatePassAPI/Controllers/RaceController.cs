@@ -55,4 +55,11 @@ public class RaceController
 
 		return Ok(result);
 	}
+
+	[HttpGet("classes/{eventClassId:guid}/motos")]
+	public async Task<IActionResult> GetMotosForClass(Guid eventClassId)
+	{
+		var existingMotos = await _motoFinder.GetByEventClassId(eventClassId);
+		return Ok(existingMotos);
+	}
 }
